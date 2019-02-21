@@ -1,5 +1,6 @@
 # toonapilib4domoticz
 A simple toonapilib based python plugin for domoticz
-
-Disclaimer: work in progress
+<br>
+<br>
+Disclaimer: work in progress<br>
 Disclaimer2: not a python expert
