@@ -9,6 +9,7 @@ Further reading: https://developer.toon.eu.
 <br>
 First requirement, install toonapilib on your domoticz server device
 * sudo pip3 install toonapilib
+Note: successfully tested with v3.0.2.
 
 Add the plugin to the domoticz project
 * Create a subfolder in the domoticz/plugins folder, eg. /home/pi/dev-domoticz/plugins/toonapilib4domoticz
