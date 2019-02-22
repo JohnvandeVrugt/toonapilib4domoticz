@@ -12,7 +12,7 @@ Note: newer toonapilib versions seem to be incompatible with the python 3.5 vers
 
 ### Add the toonapi4domoticz plugin
 * change dir into the domoticz plugins folder, e.g. `cd /home/pi/dev-domoticz/plugins`.
-* `git clone https://github.com/JohnvandeVrugt/toonapilib4domoticz`.
+* `git clone https://github.com/JohnvandeVrugt/toonapilib4domoticz`.<br>
 Or alternatively
 * Create a subfolder in the domoticz/plugins folder, eg. /home/pi/dev-domoticz/plugins/toonapilib4domoticz.
 * Copy the plugin.py file of this repository into the subfolder.
