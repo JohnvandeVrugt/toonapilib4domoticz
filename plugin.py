@@ -2,7 +2,7 @@
 # by John van de Vrugt
 #
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.0" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.1" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
