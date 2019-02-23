@@ -115,12 +115,7 @@ def UpdateDevices():
             Domoticz.Log("Update temperature: " + szSetpoint)
         Devices[4].Update(0, szSetpoint);
 
-	#todo: add heating actice, hot water active, pre-heat active
-
-        szState = str(MyToon.thermostat_state.name)
-        if DebugPrint:
-            Domoticz.Log("Update state: " + szState + " - " + str(getSelector(szState)))
-        Devices[8].Update(2, str(getSelector(szState)));
+	#todo: add heating actice, hot water active, pre-heat active and update states
 
 
 def getSelector(x):
