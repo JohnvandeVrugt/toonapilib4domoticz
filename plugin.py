@@ -2,7 +2,7 @@
 # by John van de Vrugt
 #
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.3" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.4" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
@@ -57,16 +57,8 @@ class BasePlugin:
                 except:
                     Domoticz.Log("An error occured while creating Toon devices")
 
-                #scenes
-                szStates = ""
-                for state in MyToon.thermostat_states:
-                    if state.id != 0:
-                        szStates += "|"
-                    szStates += state.name
-                if DebugPrint:
-                    Domoticz.Log(szStates)
-
-                Options = {"LevelNames": szStates, "LevelOffHidden": "false", "SelectorStyle": "1"}
+                #add scenes
+                Options = {"LevelNames": "Unknown|Away|Sleep|Home|Comfort", "LevelOffHidden": "true", "SelectorStyle": "0"}
                 Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=Options).Create()
             else:
                 UpdateDevices()
@@ -163,10 +155,16 @@ def UpdateDevices():
             Domoticz.Log("An error occured updating thermostat")
 
         try:
-            szThermostatState = str(MyToon.thermostat_state.name)
-            if DebugPrint:
-                Domoticz.Log("Update state: " + szThermostatState + " - " + str(getSelector(szThermostatState)))
-            Devices[8].Update(2, str(getSelector(szThermostatState)));
+            szThermostatState = ""
+            try:
+                szThermostatState = str(MyToon.thermostat_state.name)
+            except:
+                Domoticz.Log("An error occured updating thermostat state")
+
+            if szThermostatState != "":
+                if DebugPrint:
+                    Domoticz.Log("Update state: " + szThermostatState + " - " + str(getSelector(szThermostatState))) 
+                Devices[8].Update(2, str(getSelector(szThermostatState)));
         except:
             Domoticz.Log("An error occured updating thermostat state")
 
@@ -174,11 +172,11 @@ def UpdateDevices():
 
 def getSelector(x):
     return {
-        'Comfort': 0,
-        'Home': 10,
+        'Unknown': 0,
+        'Away': 10,
         'Sleep': 20,
-        'Away': 30,
-        'Unknown': 40,
+        'Home': 30,
+        'Comfort': 40,
     }[x]
 
 global _plugin
