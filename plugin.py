@@ -2,18 +2,18 @@
 # by John van de Vrugt
 #
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.4" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.5" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
-        <param field="Username" label="Username" required="true"/>
-        <param field="Password" label="Password" required="true"/>
+        <param field="Username" label="Eneco user" required="true"/>
+        <param field="Password" label="Eneco pass" required="true" password="true"/>
         <param field="Mode1" label="Consumer key" required="true"/>
         <param field="Mode2" label="Consumer secret" required="true"/>
         <param field="Mode6" label="Debug" width="75px">
             <options>
                 <option label="True" value="Debug"/>
-                <option label="False" value="Normal"  default="true" />
+                <option label="False" value="Normal" default="true" />
             </options>
         </param>
     </params>
