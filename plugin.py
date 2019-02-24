@@ -90,7 +90,7 @@ class BasePlugin:
                 MyToon.thermostat=Level
                 Domoticz.Log("set level " +  str(Level))
                 szSetpoint = str(MyToon.thermostat)
-                Devices[4].Update(0, szSetpoint);
+                Devices[4].Update(0, szSetpoint)
         except:
             Domoticz.Log("An error occured setting thermostat")
 
