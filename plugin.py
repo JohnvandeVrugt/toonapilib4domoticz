@@ -2,7 +2,7 @@
 # by John van de Vrugt
 #
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.2" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.3" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
@@ -67,7 +67,7 @@ class BasePlugin:
                     Domoticz.Log(szStates)
 
                 Options = {"LevelNames": szStates, "LevelOffHidden": "false", "SelectorStyle": "1"}
-                Domoticz.Device(Name="Source", Unit=8, TypeName="Selector Switch", Options=Options).Create()
+                Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=Options).Create()
             else:
                 UpdateDevices()
 
@@ -162,7 +162,15 @@ def UpdateDevices():
         except:
             Domoticz.Log("An error occured updating thermostat")
 
-        #todo: add heating actice, hot water active, pre-heat active and update states
+        try:
+            szThermostatState = str(MyToon.thermostat_state.name)
+            if DebugPrint:
+                Domoticz.Log("Update state: " + szThermostatState + " - " + str(getSelector(szThermostatState)))
+            Devices[8].Update(2, str(getSelector(szThermostatState)));
+        except:
+            Domoticz.Log("An error occured updating thermostat state")
+
+        #todo: add heating actice, hot water active, pre-heat active
 
 def getSelector(x):
     return {
