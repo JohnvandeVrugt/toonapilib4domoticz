@@ -2,18 +2,18 @@
 # by John van de Vrugt
 #
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.2" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.5" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
-        <param field="Username" label="Username" required="true"/>
-        <param field="Password" label="Password" required="true"/>
+        <param field="Username" label="Eneco user" required="true"/>
+        <param field="Password" label="Eneco pass" required="true" password="true"/>
         <param field="Mode1" label="Consumer key" required="true"/>
         <param field="Mode2" label="Consumer secret" required="true"/>
         <param field="Mode6" label="Debug" width="75px">
             <options>
                 <option label="True" value="Debug"/>
-                <option label="False" value="Normal"  default="true" />
+                <option label="False" value="Normal" default="true" />
             </options>
         </param>
     </params>
@@ -57,17 +57,9 @@ class BasePlugin:
                 except:
                     Domoticz.Log("An error occured while creating Toon devices")
 
-                #scenes
-                szStates = ""
-                for state in MyToon.thermostat_states:
-                    if state.id != 0:
-                        szStates += "|"
-                    szStates += state.name
-                if DebugPrint:
-                    Domoticz.Log(szStates)
-
-                Options = {"LevelNames": szStates, "LevelOffHidden": "false", "SelectorStyle": "1"}
-                Domoticz.Device(Name="Source", Unit=8, TypeName="Selector Switch", Options=Options).Create()
+                #add scenes
+                Options = {"LevelNames": "Unknown|Away|Sleep|Home|Comfort", "LevelOffHidden": "true", "SelectorStyle": "0"}
+                Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=Options).Create()
             else:
                 UpdateDevices()
 
@@ -162,15 +154,29 @@ def UpdateDevices():
         except:
             Domoticz.Log("An error occured updating thermostat")
 
-        #todo: add heating actice, hot water active, pre-heat active and update states
+        try:
+            szThermostatState = ""
+            try:
+                szThermostatState = str(MyToon.thermostat_state.name)
+            except:
+                Domoticz.Log("An error occured updating thermostat state")
+
+            if szThermostatState != "":
+                if DebugPrint:
+                    Domoticz.Log("Update state: " + szThermostatState + " - " + str(getSelector(szThermostatState))) 
+                Devices[8].Update(2, str(getSelector(szThermostatState)));
+        except:
+            Domoticz.Log("An error occured updating thermostat state")
+
+        #todo: add heating actice, hot water active, pre-heat active
 
 def getSelector(x):
     return {
-        'Comfort': 0,
-        'Home': 10,
+        'Unknown': 0,
+        'Away': 10,
         'Sleep': 20,
-        'Away': 30,
-        'Unknown': 40,
+        'Home': 30,
+        'Comfort': 40,
     }[x]
 
 global _plugin
