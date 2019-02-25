@@ -9,7 +9,7 @@
         <param field="Username" label="Eneco user" required="true"/>
         <param field="Password" label="Eneco pass" required="true" password="true"/>
         <param field="Mode1" label="Consumer key" required="true"/>
-        <param field="Mode2" label="Consumer secret" required="true"/>
+        <param field="Mode2" label="Consumer secret" required="true" password="true"/>
         <param field="Mode6" label="Debug" width="75px">
             <options>
                 <option label="True" value="Debug"/>
