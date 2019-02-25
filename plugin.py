@@ -2,7 +2,7 @@
 # by John van de Vrugt
 #
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.5" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.6" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
@@ -79,7 +79,7 @@ class BasePlugin:
 
         try:
             if Unit == 4:
-                MyToon.thermostat=Level
+                MyToon.thermostat = Level
                 Domoticz.Log("set level " +  str(Level))
                 szSetpoint = str(MyToon.thermostat)
                 Devices[4].Update(0, szSetpoint)
@@ -149,7 +149,7 @@ def UpdateDevices():
         try:
             szSetpoint = str(MyToon.thermostat)
             if DebugPrint:
-                Domoticz.Log("Update temperature: " + szSetpoint)
+                Domoticz.Log("Update setpoint: " + szSetpoint)
             Devices[4].Update(0, szSetpoint)
         except:
             Domoticz.Log("An error occured updating thermostat")
@@ -163,20 +163,47 @@ def UpdateDevices():
 
             if szThermostatState != "":
                 if DebugPrint:
-                    Domoticz.Log("Update state: " + szThermostatState + " - " + str(getSelector(szThermostatState))) 
-                Devices[8].Update(2, str(getSelector(szThermostatState)));
+                    Domoticz.Log("Update state: " + szThermostatState + " - " + str(getSceneValue(szThermostatState))) 
+                Devices[8].Update(2, str(getSceneValue(szThermostatState)))
         except:
             Domoticz.Log("An error occured updating thermostat state")
 
-        #todo: add heating actice, hot water active, pre-heat active
+        try:
+            szBurnerState = ""
+            hotwater_on = 0
+            heating_on = 0
+            preheating_on = 0
 
-def getSelector(x):
+            try:
+                szBurnerState = MyToon.burner_state
+            except:
+              Domoticz.Log("An error occured updating burner state")
+
+            if szBurnerState != "":
+                if DebugPrint:
+                    Domoticz.Log("Update state: " + szBurnerState)
+ 
+                if szBurnerState == "on":
+                    heating_on = 1
+                elif szBurnerState == "water_heating":
+                    hotwater_on = 1
+                elif szBurnerState == "pre_heating":
+                    preheating_on = 1
+
+                Devices[5].Update(heating_on, str(heating_on))
+                Devices[6].Update(hotwater_on, str(hotwater_on))
+                Devices[7].Update(preheating_on, str(preheating_on))
+
+        except:
+            Domoticz.Log("An error occured updating burner state")
+
+def getSceneValue(x):
     return {
         'Unknown': 0,
         'Away': 10,
         'Sleep': 20,
         'Home': 30,
-        'Comfort': 40,
+        'Comfort': 40
     }[x]
 
 global _plugin
