@@ -2,7 +2,7 @@
 # by John van de Vrugt
 #
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.6" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.7" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
@@ -156,10 +156,15 @@ def UpdateDevices():
 
         try:
             szThermostatState = ""
-            try:
-                szThermostatState = str(MyToon.thermostat_state.name)
-            except:
-                Domoticz.Log("An error occured updating thermostat state")
+
+            if MyToon.thermostat_info.program_state == 0:
+                #program is off
+                szThermostatState = "Unknown"
+            else:
+                try:
+                    szThermostatState = str(MyToon.thermostat_state.name)
+                except:
+                    Domoticz.Log("An error occured updating thermostat state")
 
             if szThermostatState != "":
                 if DebugPrint:
@@ -177,7 +182,7 @@ def UpdateDevices():
             try:
                 szBurnerState = MyToon.burner_state
             except:
-              Domoticz.Log("An error occured updating burner state")
+                Domoticz.Log("An error occured updating burner state")
 
             if szBurnerState != "":
                 if DebugPrint:
