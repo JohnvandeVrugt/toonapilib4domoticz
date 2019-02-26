@@ -2,7 +2,7 @@
 # by John van de Vrugt
 #
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.7" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.8" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
@@ -123,9 +123,11 @@ def UpdateDevices():
 
     if MyToon != None:
         try: 
-            szPower = str(MyToon.power.meter_reading_low) + ";" + str(MyToon.power.meter_reading) + ";0;0;" + str(MyToon.power.value) + ";0"
+            szPower = str(MyToon.power.meter_reading_low) + ";" + str(MyToon.power.meter_reading) + ";" \
+                    + str(MyToon.solar.meter_reading_low_produced) + ";" + str(MyToon.solar.meter_reading_produced) + ";"\
+                    + str(MyToon.power.value) + ";" + str(MyToon.solar.value)            
             if DebugPrint:
-                Domoticz.Log("Update power usage: " + szPower)
+                Domoticz.Log("Update power/solar usage: " + szPower)
             Devices[1].Update(0, szPower)
         except:
             Domoticz.Log("An error occured updating power usage")
