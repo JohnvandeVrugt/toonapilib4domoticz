@@ -10,3 +10,5 @@ Todo - add support for
 * lights
 * smart plugs
 * smoke detectors
+<br>
+Refactoring / documentation
