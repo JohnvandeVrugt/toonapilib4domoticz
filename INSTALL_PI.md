@@ -5,10 +5,10 @@ The toonapilib source can be found at https://github.com/costastf/toonapilib
 This plugin requires a Toon consumer api key and secret.<br>
 Further reading: https://developer.toon.eu.
 
-### Install toonapilib
+### Install / update toonapilib
 * `sudo pip3 install toonapilib`
 
-### Add the toonapi4domoticz plugin (this also is the way to update to a newer version for now)
+### Install / update the toonapi4domoticz plugin
 * change dir into the domoticz plugins folder, e.g. `cd /home/pi/dev-domoticz/plugins`.
 * `git clone https://github.com/JohnvandeVrugt/toonapilib4domoticz`.<br>
 Or alternatively
