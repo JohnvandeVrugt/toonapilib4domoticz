@@ -1,8 +1,13 @@
 # ToonApiLib for Domoticz
+# https://github.com/JohnvandeVrugt/toonapilib4domoticz
 # by John van de Vrugt
 #
+# A domoticz plugin based on the toonapilib by Costas Tyfoxylos
+# https://github.com/costastf/toonapilib/
+#
+# This plugin is tested with toonapilib version 3.0.10
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.6" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.9" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
@@ -73,7 +78,7 @@ class BasePlugin:
         Domoticz.Log("onMessage called")
 
     def onCommand(self, Unit, Command, Level, Hue):
-        global myToon
+        global MyToon
         if DebugPrint:
             Domoticz.Log("onCommand called for Unit " + str(Unit) + ": Parameter '" + str(Command) + "', Level: " + str(Level))
 
@@ -81,10 +86,18 @@ class BasePlugin:
             if Unit == 4:
                 MyToon.thermostat = Level
                 Domoticz.Log("set level " +  str(Level))
-                szSetpoint = str(MyToon.thermostat)
-                Devices[4].Update(0, szSetpoint)
+                Devices[4].Update(0, str(Level))
         except:
             Domoticz.Log("An error occured setting thermostat")
+
+        try:
+            if Unit == 8:
+                szScene = getSceneName(Level)
+                MyToon.thermostat_state = szScene
+                Domoticz.Log("set scene " +  str(Level) + " - " + szScene)
+                Devices[8].Update(2, str(Level))
+        except:
+            Domoticz.Log("An error occured setting scene")
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
         Domoticz.Log("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," + str(Priority) + "," + Sound + "," + ImageFile)
@@ -123,9 +136,11 @@ def UpdateDevices():
 
     if MyToon != None:
         try: 
-            szPower = str(MyToon.power.meter_reading_low) + ";" + str(MyToon.power.meter_reading) + ";0;0;" + str(MyToon.power.value) + ";0"
+            szPower = str(MyToon.power.meter_reading_low) + ";" + str(MyToon.power.meter_reading) + ";" \
+                    + str(MyToon.solar.meter_reading_low_produced) + ";" + str(MyToon.solar.meter_reading_produced) + ";"\
+                    + str(MyToon.power.value) + ";" + str(MyToon.solar.value)            
             if DebugPrint:
-                Domoticz.Log("Update power usage: " + szPower)
+                Domoticz.Log("Update power/solar usage: " + szPower)
             Devices[1].Update(0, szPower)
         except:
             Domoticz.Log("An error occured updating power usage")
@@ -156,10 +171,15 @@ def UpdateDevices():
 
         try:
             szThermostatState = ""
-            try:
-                szThermostatState = str(MyToon.thermostat_state.name)
-            except:
-                Domoticz.Log("An error occured updating thermostat state")
+
+            if MyToon.thermostat_info.program_state == 0:
+                #program is off
+                szThermostatState = "Unknown"
+            else:
+                try:
+                    szThermostatState = str(MyToon.thermostat_state.name)
+                except:
+                    Domoticz.Log("An error occured updating thermostat state")
 
             if szThermostatState != "":
                 if DebugPrint:
@@ -177,7 +197,7 @@ def UpdateDevices():
             try:
                 szBurnerState = MyToon.burner_state
             except:
-              Domoticz.Log("An error occured updating burner state")
+                Domoticz.Log("An error occured updating burner state")
 
             if szBurnerState != "":
                 if DebugPrint:
@@ -205,6 +225,20 @@ def getSceneValue(x):
         'Home': 30,
         'Comfort': 40
     }[x]
+
+def getSceneName(i):
+    szRetString = "Unknown"
+
+    if i == 10:
+        szRetString = "Away"
+    elif i == 20:
+        szRetString = "Sleep" 
+    elif i == 30:
+        szRetString = "Home"
+    elif i == 40:
+        szRetString = "Comfort"
+
+    return szRetString
 
 global _plugin
 _plugin = BasePlugin()
