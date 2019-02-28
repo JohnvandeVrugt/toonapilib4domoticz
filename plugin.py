@@ -7,7 +7,7 @@
 #
 # This plugin is tested with toonapilib version 3.0.10
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.11" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.12" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
@@ -60,7 +60,7 @@ class ToonApiLibPlugin:
                     Domoticz.Log("An error occurred while creating Toon devices")
 
                 options = {
-                    "LevelNames": "Unknown|Away|Sleep|Home|Comfort",
+                    "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
                     "LevelOffHidden": "true", "SelectorStyle": "0"}
 
                 Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=options).Create()
@@ -220,7 +220,8 @@ class ToonApiLibPlugin:
             'Away': 10,
             'Sleep': 20,
             'Home': 30,
-            'Comfort': 40
+            'Comfort': 40,
+            'Holiday': 50
         }[x]
 
     @staticmethod
@@ -235,6 +236,8 @@ class ToonApiLibPlugin:
             str_return_string = "Home"
         elif i == 40:
             str_return_string = "Comfort"
+        elif i == 50:
+            str_return_string = "Holiday"
 
         return str_return_string
 
