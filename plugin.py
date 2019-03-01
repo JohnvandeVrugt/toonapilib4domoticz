@@ -7,7 +7,7 @@
 #
 # This plugin is tested with toonapilib version 3.0.10
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.10" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.12" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
@@ -60,7 +60,7 @@ class ToonApiLibPlugin:
                     Domoticz.Log("An error occurred while creating Toon devices")
 
                 options = {
-                    "LevelNames": "Unknown|Away|Sleep|Home|Comfort",
+                    "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
                     "LevelOffHidden": "true", "SelectorStyle": "0"}
 
                 Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=options).Create()
@@ -165,18 +165,16 @@ class ToonApiLibPlugin:
                     Domoticz.Log("Update set point: " + str_set_point)
                 Devices[4].Update(0, str_set_point)
             except:
-                Domoticz.Log("An error occurred updating thermostat")
+                Domoticz.Log("An error occurred updating thermostat set point")
 
             try:
                 str_thermostat_state = ""
-
-                if self.my_toon.thermostat_info.program_state == 0:
+                if not self.my_toon.thermostat_state:
                     str_thermostat_state = "Unknown"
+                    if self.print_debug_log:
+                        Domoticz.Log("Update state: Manual set point - no thermostat state chosen")
                 else:
-                    try:
-                        str_thermostat_state = str(self.my_toon.thermostat_state.name)
-                    except:
-                        Domoticz.Log("An error occurred updating thermostat state")
+                    str_thermostat_state = str(self.my_toon.thermostat_state.name)
 
                 if str_thermostat_state != "":
                     if self.print_debug_log:
@@ -201,7 +199,7 @@ class ToonApiLibPlugin:
                     if self.print_debug_log:
                         Domoticz.Log("Update state: " + str_burner_state)
 
-                    if str_burner_state  == "on":
+                    if str_burner_state == "on":
                         heating_on = 1
                     elif str_burner_state == "water_heating":
                         hot_water_on = 1
@@ -222,7 +220,8 @@ class ToonApiLibPlugin:
             'Away': 10,
             'Sleep': 20,
             'Home': 30,
-            'Comfort': 40
+            'Comfort': 40,
+            'Holiday': 50
         }[x]
 
     @staticmethod
@@ -232,11 +231,13 @@ class ToonApiLibPlugin:
         if i == 10:
             str_return_string = "Away"
         elif i == 20:
-            str_return_string= "Sleep"
+            str_return_string = "Sleep"
         elif i == 30:
-            str_return_string= "Home"
+            str_return_string = "Home"
         elif i == 40:
-            str_return_string= "Comfort"
+            str_return_string = "Comfort"
+        elif i == 50:
+            str_return_string = "Holiday"
 
         return str_return_string
 
