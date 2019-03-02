@@ -12,3 +12,7 @@ Todo - add support for
 * smoke detectors
 <br>
 Refactoring / documentation
+<br>
+<br>
+This plugin will not work in combination with the stable branch.<br>
+Please use the development (beta) version of domoticz.
