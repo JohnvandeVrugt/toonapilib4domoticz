@@ -12,10 +12,7 @@ Further reading: https://developer.toon.eu.
 
 ### Install toonapilib
 * Open a command prompt (with admin rights)
-* Install the toonapilib: `pip install toonapilib==3.0.2`
-
-Note: newer toonapilib versions seem to be incompatible with the python 3.5 version?<br>
-      At least this version seems to run without any issues
+* Install the toonapilib: `pip install toonapilib -U` The -U flag updates toonapilib to the latest version.
 
 ### Add the toonapi4domoticz plugin
 * Create a subfolder named 'plugins' in the installation folder of Domoticz, e.g. c:\program files(x86)\domoticz\plugins.
