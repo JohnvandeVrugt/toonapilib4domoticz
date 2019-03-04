@@ -12,7 +12,7 @@ Further reading: https://developer.toon.eu.
 
 ### Install toonapilib
 * Open a command prompt (with admin rights)
-* Install the toonapilib: `pip install toonapilib==3.0.2`
+* Install the toonapilib: `pip install toonapilib -U` The -U flag updates toonapilib to the latest version.
 
 Note: newer toonapilib versions seem to be incompatible with the python 3.5 version?<br>
       At least this version seems to run without any issues
