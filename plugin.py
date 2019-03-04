@@ -4,10 +4,8 @@
 #
 # A domoticz plugin based on the toonapilib by Costas Tyfoxylos
 # https://github.com/costastf/toonapilib/
-#
-# This plugin is tested with toonapilib version 3.0.10
 """
-<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.12" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
+<plugin key="ToonApiLib" name="ToonApiLib" author="John van de Vrugt" version="1.0.13" wikilink="https://github.com/JohnvandeVrugt/toonapilib4domoticz">
     <description>
     </description>
     <params>
@@ -25,7 +23,7 @@
 </plugin>
 """
 import Domoticz
-from toonapilib import Toon
+import toonapilib
 
 
 class ToonApiLibPlugin:
@@ -41,6 +39,8 @@ class ToonApiLibPlugin:
 
         if self.print_debug_log:
             Domoticz.Log("Starting toonapilib4domoticz with debug logging")
+
+        Domoticz.Log("Using toonapilib version : " + toonapilib.__version__ + " by " + toonapilib.__author__)
 
         self.create_toon_object()
 
@@ -121,7 +121,7 @@ class ToonApiLibPlugin:
             if self.print_debug_log:
                 Domoticz.Log("Creating toonapilib object")
 
-            self.my_toon = Toon(myname, mypass, mykey, mysecret)
+            self.my_toon = toonapilib.Toon(myname, mypass, mykey, mysecret)
         except Exception:
             self.my_toon = None
             Domoticz.Log("Could not create a toonapilib object")
