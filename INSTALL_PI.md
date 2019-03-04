@@ -6,7 +6,8 @@ This plugin requires a Toon consumer api key and secret.<br>
 Further reading: https://developer.toon.eu.
 
 ### Install / update toonapilib
-* `sudo pip3 install toonapilib`
+* `sudo pip3 install toonapilib -U`
+The -U flag updates toonapilib to the latest version.
 
 ### Install / update the toonapi4domoticz plugin
 * change dir into the domoticz plugins folder, e.g. `cd /home/pi/dev-domoticz/plugins`.
