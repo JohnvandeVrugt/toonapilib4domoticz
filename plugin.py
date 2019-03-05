@@ -56,14 +56,13 @@ class ToonApiLibPlugin:
                     Domoticz.Device(Name="Heating active", Unit=5, Type=244, Subtype=62, Switchtype=0).Create()
                     Domoticz.Device(Name="Hot water active", Unit=6, Type=244, Subtype=62, Switchtype=0).Create()
                     Domoticz.Device(Name="Preheat active", Unit=7, Type=244, Subtype=62, Switchtype=0).Create()
+
+                    options = {
+                        "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
+                        "LevelOffHidden": "true", "SelectorStyle": "0"}
+                    Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=options).Create()
                 except:
                     Domoticz.Log("An error occurred while creating Toon devices")
-
-                options = {
-                    "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
-                    "LevelOffHidden": "true", "SelectorStyle": "0"}
-
-                Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=options).Create()
             else:
                 self.update_devices()
 
@@ -115,87 +114,100 @@ class ToonApiLibPlugin:
 
     def update_devices(self):
         if self.my_toon is not None:
-            try:
-                str_power = str(self.my_toon.power.meter_reading_low) + ";" + \
-                            str(self.my_toon.power.meter_reading) + ";" + \
-                            str(self.my_toon.solar.meter_reading_low_produced) + ";" + \
-                            str(self.my_toon.solar.meter_reading_produced) + ";" + \
-                            str(self.my_toon.power.value) + ";" + str(self.my_toon.solar.value)
-                if self.print_debug_log:
-                    Domoticz.Log("Update power/solar usage: " + str_power)
-                Devices[1].Update(0, str_power)
-            except:
-                Domoticz.Log("An error occurred updating power usage")
+            self._update_power()
+            self._update_gas()
+            self._update_temperature()
+            self._update_set_point()
+            self._update_burner_state()
+            self._update_thermostat_state()
+
+    def _update_power(self):
+        try:
+            str_power = str(self.my_toon.power.meter_reading_low) + ";" + \
+                        str(self.my_toon.power.meter_reading) + ";" + \
+                        str(self.my_toon.solar.meter_reading_low_produced) + ";" + \
+                        str(self.my_toon.solar.meter_reading_produced) + ";" + \
+                        str(self.my_toon.power.value) + ";" + str(self.my_toon.solar.value)
+            if self.print_debug_log:
+                Domoticz.Log("Update power/solar usage: " + str_power)
+            Devices[1].Update(0, str_power)
+        except:
+            Domoticz.Log("An error occurred updating power usage")
+
+    def _update_gas(self):
+        try:
+            str_gas = str(self.my_toon.gas.daily_usage)
+            if self.print_debug_log:
+                Domoticz.Log("Update gas usage: " + str_gas)
+            Devices[2].Update(0, str_gas)
+        except:
+            Domoticz.Log("An error occurred updating gas usage")
+
+    def _update_temperature(self):
+        try:
+            str_temp = str(self.my_toon.temperature)
+            if self.print_debug_log:
+                Domoticz.Log("Update temperature: " + str_temp)
+            Devices[3].Update(0, str_temp)
+        except:
+            Domoticz.Log("An error occurred updating temperature")
+
+    def _update_set_point(self):
+        try:
+            str_set_point = str(self.my_toon.thermostat)
+            if self.print_debug_log:
+                Domoticz.Log("Update set point: " + str_set_point)
+            Devices[4].Update(0, str_set_point)
+        except:
+            Domoticz.Log("An error occurred updating thermostat set point")
+
+    def _update_burner_state(self):
+        try:
+            str_burner_state = ""
+            hot_water_on = 0
+            heating_on = 0
+            preheating_on = 0
 
             try:
-                str_gas = str(self.my_toon.gas.daily_usage)
-                if self.print_debug_log:
-                    Domoticz.Log("Update gas usage: " + str_gas)
-                Devices[2].Update(0, str_gas)
-            except:
-                Domoticz.Log("An error occurred updating gas usage")
-
-            try:
-                str_temp = str(self.my_toon.temperature)
-                if self.print_debug_log:
-                    Domoticz.Log("Update temperature: " + str_temp)
-                Devices[3].Update(0, str_temp)
-            except:
-                Domoticz.Log("An error occurred updating temperature")
-
-            try:
-                str_set_point = str(self.my_toon.thermostat)
-                if self.print_debug_log:
-                    Domoticz.Log("Update set point: " + str_set_point)
-                Devices[4].Update(0, str_set_point)
-            except:
-                Domoticz.Log("An error occurred updating thermostat set point")
-
-            try:
-                str_thermostat_state = ""
-                if not self.my_toon.thermostat_state:
-                    str_thermostat_state = "Unknown"
-                    if self.print_debug_log:
-                        Domoticz.Log("Update state: Manual set point - no thermostat state chosen")
-                else:
-                    str_thermostat_state = str(self.my_toon.thermostat_state.name)
-
-                if str_thermostat_state != "":
-                    if self.print_debug_log:
-                        Domoticz.Log("Update state: " + str_thermostat_state + " - " +
-                                     str(self.get_scene_value(str_thermostat_state)))
-                    Devices[8].Update(2, str(self.get_scene_value(str_thermostat_state)))
-            except:
-                Domoticz.Log("An error occurred updating thermostat state")
-
-            try:
-                str_burner_state = ""
-                hot_water_on = 0
-                heating_on = 0
-                preheating_on = 0
-
-                try:
-                    str_burner_state = self.my_toon.burner_state
-                except:
-                    Domoticz.Log("An error occurred updating burner state")
-
-                if str_burner_state != "":
-                    if self.print_debug_log:
-                        Domoticz.Log("Update state: " + str_burner_state)
-
-                    if str_burner_state == "on":
-                        heating_on = 1
-                    elif str_burner_state == "water_heating":
-                        hot_water_on = 1
-                    elif str_burner_state == "pre_heating":
-                        preheating_on = 1
-
-                    Devices[5].Update(heating_on, str(heating_on))
-                    Devices[6].Update(hot_water_on, str(hot_water_on))
-                    Devices[7].Update(preheating_on, str(preheating_on))
-
+                str_burner_state = self.my_toon.burner_state
             except:
                 Domoticz.Log("An error occurred updating burner state")
+
+            if str_burner_state != "":
+                if self.print_debug_log:
+                    Domoticz.Log("Update state: " + str_burner_state)
+
+                if str_burner_state == "on":
+                    heating_on = 1
+                elif str_burner_state == "water_heating":
+                    hot_water_on = 1
+                elif str_burner_state == "pre_heating":
+                    preheating_on = 1
+
+                Devices[5].Update(heating_on, str(heating_on))
+                Devices[6].Update(hot_water_on, str(hot_water_on))
+                Devices[7].Update(preheating_on, str(preheating_on))
+
+        except:
+            Domoticz.Log("An error occurred updating burner state")
+
+    def _update_thermostat_state(self):
+        try:
+            str_thermostat_state = ""
+            if not self.my_toon.thermostat_state:
+                str_thermostat_state = "Unknown"
+                if self.print_debug_log:
+                    Domoticz.Log("Update state: Manual set point - no thermostat state chosen")
+            else:
+                str_thermostat_state = str(self.my_toon.thermostat_state.name)
+
+            if str_thermostat_state != "":
+                if self.print_debug_log:
+                    Domoticz.Log("Update state: " + str_thermostat_state + " - " +
+                                 str(self.get_scene_value(str_thermostat_state)))
+                Devices[8].Update(2, str(self.get_scene_value(str_thermostat_state)))
+        except:
+            Domoticz.Log("An error occurred updating thermostat state")
 
     @staticmethod
     def get_scene_value(x):
