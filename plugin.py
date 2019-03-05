@@ -47,24 +47,9 @@ class ToonApiLibPlugin:
         if self.my_toon is not None:
             if len(Devices) == 0:
                 Domoticz.Log("Creating Toon devices")
-
-                try:
-                    Domoticz.Device(Name="Power usage", Unit=1, Type=250, Subtype=1).Create()
-                    Domoticz.Device(Name="Gas usage", Unit=2, Type=251, Subtype=2).Create()
-                    Domoticz.Device(Name="Room temperature", Unit=3, Type=80, Subtype=5).Create()
-                    Domoticz.Device(Name="Set point", Unit=4, Type=242, Subtype=1).Create()
-                    Domoticz.Device(Name="Heating active", Unit=5, Type=244, Subtype=62, Switchtype=0).Create()
-                    Domoticz.Device(Name="Hot water active", Unit=6, Type=244, Subtype=62, Switchtype=0).Create()
-                    Domoticz.Device(Name="Preheat active", Unit=7, Type=244, Subtype=62, Switchtype=0).Create()
-
-                    options = {
-                        "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
-                        "LevelOffHidden": "true", "SelectorStyle": "0"}
-                    Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=options).Create()
-                except:
-                    Domoticz.Log("An error occurred while creating Toon devices")
+                self._create_devices()
             else:
-                self.update_devices()
+                self._update_devices()
 
     def on_command(self, Unit, Command, Level, Hue):
         if self.print_debug_log:
@@ -90,9 +75,9 @@ class ToonApiLibPlugin:
 
     def on_heartbeat(self):
         self.heart_beat = self.heart_beat + 1
-        if self.heart_beat == 12:
+        if self.my_toon is not None and self.heart_beat == 12:
             self.heart_beat = 0
-            self.update_devices()
+            self._update_devices()
 
     def create_toon_object(self):
         try:
@@ -112,7 +97,24 @@ class ToonApiLibPlugin:
             Domoticz.Log("* Check your credentials")
             Domoticz.Log("* Restart Domoticz")
 
-    def update_devices(self):
+    def _create_devices(self):
+        try:
+            Domoticz.Device(Name="Power usage", Unit=1, Type=250, Subtype=1).Create()
+            Domoticz.Device(Name="Gas usage", Unit=2, Type=251, Subtype=2).Create()
+            Domoticz.Device(Name="Room temperature", Unit=3, Type=80, Subtype=5).Create()
+            Domoticz.Device(Name="Set point", Unit=4, Type=242, Subtype=1).Create()
+            Domoticz.Device(Name="Heating active", Unit=5, Type=244, Subtype=62, Switchtype=0).Create()
+            Domoticz.Device(Name="Hot water active", Unit=6, Type=244, Subtype=62, Switchtype=0).Create()
+            Domoticz.Device(Name="Preheat active", Unit=7, Type=244, Subtype=62, Switchtype=0).Create()
+
+            options = {
+                "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
+                "LevelOffHidden": "true", "SelectorStyle": "0"}
+            Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=options).Create()
+        except:
+            Domoticz.Log("An error occurred while creating Toon devices")
+
+    def _update_devices(self):
         if self.my_toon is not None:
             self._update_power()
             self._update_gas()
