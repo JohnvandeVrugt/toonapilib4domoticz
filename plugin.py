@@ -42,14 +42,14 @@ class ToonApiLibPlugin:
 
         Domoticz.Log("Using toonapilib version " + toonapilib.__version__ + " by " + toonapilib.__author__)
 
-        self.create_toon_object()
+        self._create_toon_object()
 
         if self.my_toon is not None:
             if len(Devices) == 0:
                 Domoticz.Log("Creating Toon devices")
                 self._create_devices()
-            else:
-                self._update_devices()
+
+        self._update_devices()
 
     def on_command(self, Unit, Command, Level, Hue):
         if self.print_debug_log:
@@ -79,7 +79,7 @@ class ToonApiLibPlugin:
             self.heart_beat = 0
             self._update_devices()
 
-    def create_toon_object(self):
+    def _create_toon_object(self):
         try:
             myname = Parameters["Username"]
             mypass = Parameters["Password"]
