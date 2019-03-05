@@ -67,15 +67,6 @@ class ToonApiLibPlugin:
             else:
                 self.update_devices()
 
-    def on_stop(self):
-        Domoticz.Log("onStop called")
-
-    def on_connect(self, Connection, Status, Description):
-        Domoticz.Log("onConnect called")
-
-    def on_message(self, Connection, Data):
-        Domoticz.Log("onMessage called")
-
     def on_command(self, Unit, Command, Level, Hue):
         if self.print_debug_log:
             Domoticz.Log("onCommand called for Unit " + str(Unit) + ": Parameter '" +
@@ -97,13 +88,6 @@ class ToonApiLibPlugin:
                 Devices[8].Update(2, str(Level))
         except:
             Domoticz.Log("An error occurred setting scene")
-
-    def on_notification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
-        Domoticz.Log("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," +
-                     str(Priority) + "," + Sound + "," + ImageFile)
-
-    def on_disconnect(self, Connection):
-        Domoticz.Log("onDisconnect called")
 
     def on_heartbeat(self):
         self.heart_beat = self.heart_beat + 1
@@ -242,13 +226,6 @@ class ToonApiLibPlugin:
         return str_return_string
 
 
-class ExceptionHelper(Exception):
-
-    def __init__(self, message):
-        super(ExceptionHelper, self).__init__(message)
-        Domoticz.Log(message)
-
-
 global _plugin
 _plugin = ToonApiLibPlugin()
 
@@ -257,36 +234,9 @@ def onStart():
     global _plugin
     _plugin.on_start()
 
-
-def onStop():
-    global _plugin
-    _plugin.on_stop()
-
-
-def onConnect(Connection, Status, Description):
-    global _plugin
-    _plugin.on_connect(Connection, Status, Description)
-
-
-def onMessage(Connection, Data):
-    global _plugin
-    _plugin.on_message(Connection, Data)
-
-
 def onCommand(Unit, Command, Level, Hue):
     global _plugin
     _plugin.on_command(Unit, Command, Level, Hue)
-
-
-def onNotification(Name, Subject, Text, Status, Priority, Sound, ImageFile):
-    global _plugin
-    _plugin.on_notification(Name, Subject, Text, Status, Priority, Sound, ImageFile)
-
-
-def onDisconnect(Connection):
-    global _plugin
-    _plugin.on_disconnect(Connection)
-
 
 def onHeartbeat():
     global _plugin
