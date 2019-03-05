@@ -35,16 +35,15 @@ class ToonApiLibPlugin:
         return
 
     def on_start(self):
-        self.print_debug_log = Parameters["Mode6"] == "Debug"
-
-        if self.print_debug_log:
-            Domoticz.Log("Starting toonapilib4domoticz with debug logging")
-
         Domoticz.Log("Using toonapilib version " + toonapilib.__version__ + " by " + toonapilib.__author__)
 
-        self._create_toon_object()
+        self.print_debug_log = Parameters["Mode6"] == "Debug"
+        if self.print_debug_log:
+            Domoticz.Log("Debug logging is active")
 
-        if self.my_toon is not None:
+        if self.my_toon is None:
+            self._create_toon_object()
+        else:
             if len(Devices) == 0:
                 Domoticz.Log("Creating Toon devices")
                 self._create_devices()
