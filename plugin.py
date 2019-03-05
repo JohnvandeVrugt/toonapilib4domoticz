@@ -40,7 +40,7 @@ class ToonApiLibPlugin:
         if self.print_debug_log:
             Domoticz.Log("Starting toonapilib4domoticz with debug logging")
 
-        Domoticz.Log("Using toonapilib version : " + toonapilib.__version__ + " by " + toonapilib.__author__)
+        Domoticz.Log("Using toonapilib version " + toonapilib.__version__ + " by " + toonapilib.__author__)
 
         self.create_toon_object()
 
