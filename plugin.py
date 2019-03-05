@@ -43,11 +43,8 @@ class ToonApiLibPlugin:
 
         if self.my_toon is None:
             self._create_toon_object()
-        else:
-            if len(Devices) == 0:
-                Domoticz.Log("Creating Toon devices")
-                self._create_devices()
 
+        self._check_and_create_devices()
         self._update_devices()
 
     def on_command(self, Unit, Command, Level, Hue):
@@ -96,22 +93,67 @@ class ToonApiLibPlugin:
             Domoticz.Log("* Check your credentials")
             Domoticz.Log("* Restart Domoticz")
 
-    def _create_devices(self):
-        try:
-            Domoticz.Device(Name="Power usage", Unit=1, Type=250, Subtype=1).Create()
-            Domoticz.Device(Name="Gas usage", Unit=2, Type=251, Subtype=2).Create()
-            Domoticz.Device(Name="Room temperature", Unit=3, Type=80, Subtype=5).Create()
-            Domoticz.Device(Name="Set point", Unit=4, Type=242, Subtype=1).Create()
-            Domoticz.Device(Name="Heating active", Unit=5, Type=244, Subtype=62, Switchtype=0).Create()
-            Domoticz.Device(Name="Hot water active", Unit=6, Type=244, Subtype=62, Switchtype=0).Create()
-            Domoticz.Device(Name="Preheat active", Unit=7, Type=244, Subtype=62, Switchtype=0).Create()
+    def _check_and_create_devices(self):
+        Domoticz.Log("Check and create Toon devices")
 
-            options = {
-                "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
-                "LevelOffHidden": "true", "SelectorStyle": "0"}
-            Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=options).Create()
-        except:
-            Domoticz.Log("An error occurred while creating Toon devices")
+        if 1 not in Devices:
+            try:
+                Domoticz.Log("Creating Power usage device")
+                Domoticz.Device(Name="Power usage", Unit=1, Type=250, Subtype=1).Create()
+            except:
+                Domoticz.Log("An error occurred creating Power usage device")
+
+        if 2 not in Devices:
+            try:
+                Domoticz.Log("Creating Gas usage device")
+                Domoticz.Device(Name="Gas usage", Unit=2, Type=251, Subtype=2).Create()
+            except:
+                Domoticz.Log("An error occurred creating Gas usage device")
+
+        if 3 not in Devices:
+            try:
+                Domoticz.Log("Creating Room temperature device")
+                Domoticz.Device(Name="Room temperature", Unit=3, Type=80, Subtype=5).Create()
+            except:
+                Domoticz.Log("An error occurred creating Room temperature device")
+
+        if 4 not in Devices:
+            try:
+                Domoticz.Log("Creating Set point device")
+                Domoticz.Device(Name="Set point", Unit=4, Type=242, Subtype=1).Create()
+            except:
+                Domoticz.Log("An error occurred creating Set point device")
+
+        if 5 not in Devices:
+            try:
+                Domoticz.Log("Creating Heating active device")
+                Domoticz.Device(Name="Heating active", Unit=5, Type=244, Subtype=62, Switchtype=0).Create()
+            except:
+                Domoticz.Log("An error occurred creating Heating active device")
+
+        if 6 not in Devices:
+            try:
+                Domoticz.Log("Creating Hot water active device")
+                Domoticz.Device(Name="Hot water active", Unit=6, Type=244, Subtype=62, Switchtype=0).Create()
+            except:
+                Domoticz.Log("An error occurred creating Hot water active device")
+
+        if 7 not in Devices:
+            try:
+                Domoticz.Log("Creating Preheat active device")
+                Domoticz.Device(Name="Preheat active", Unit=7, Type=244, Subtype=62, Switchtype=0).Create()
+            except:
+                Domoticz.Log("An error occurred creating Preheat active device")
+
+        if 8 not in Devices:
+            try:
+                Domoticz.Log("Creating Scene device")
+                options = {
+                    "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
+                    "LevelOffHidden": "true", "SelectorStyle": "0"}
+                Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=options).Create()
+            except:
+                Domoticz.Log("An error occurred creating Scene device")
 
     def _update_devices(self):
         if self.my_toon is not None:
@@ -247,9 +289,11 @@ def onStart():
     global _plugin
     _plugin.on_start()
 
+
 def onCommand(Unit, Command, Level, Hue):
     global _plugin
     _plugin.on_command(Unit, Command, Level, Hue)
+
 
 def onHeartbeat():
     global _plugin
