@@ -52,7 +52,7 @@ class ToonApiLibPlugin:
                     Domoticz.Device(Name="Power usage", Unit=1, Type=250, Subtype=1).Create()
                     Domoticz.Device(Name="Gas usage", Unit=2, Type=251, Subtype=2).Create()
                     Domoticz.Device(Name="Room temperature", Unit=3, Type=80, Subtype=5).Create()
-                    Domoticz.Device(Name="Setpoint", Unit=4, Type=242, Subtype=1).Create()
+                    Domoticz.Device(Name="Set point", Unit=4, Type=242, Subtype=1).Create()
                     Domoticz.Device(Name="Heating active", Unit=5, Type=244, Subtype=62, Switchtype=0).Create()
                     Domoticz.Device(Name="Hot water active", Unit=6, Type=244, Subtype=62, Switchtype=0).Create()
                     Domoticz.Device(Name="Preheat active", Unit=7, Type=244, Subtype=62, Switchtype=0).Create()
