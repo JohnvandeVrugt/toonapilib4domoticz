@@ -56,6 +56,15 @@ class ToonApiLibPlugin:
     print_debug_log = True
     heart_bead_mod = 1
 
+    prv_str_power = ""
+    prv_str_gas = ""
+    prv_str_temp = ""
+    prv_str_set_point = ""
+    prv_str_burner_state = ""
+    prv_str_thermostat_state = ""
+    prv_program_state = -1
+    prv_modulation_level = -1
+
     def __init__(self):
         return
 
@@ -229,36 +238,52 @@ class ToonApiLibPlugin:
                         str(self.my_toon.solar.meter_reading_low_produced) + ";" + \
                         str(self.my_toon.solar.meter_reading_produced) + ";" + \
                         str(self.my_toon.power.value) + ";" + str(self.my_toon.solar.value)
-            if self.print_debug_log:
-                Domoticz.Log("Update power/solar usage: " + str_power)
-            Devices[UNIT_POWER].Update(0, str_power)
+
+            if str_power != self.prv_str_power:
+                if self.print_debug_log:
+                    Domoticz.Log("Update power/solar usage: " + str_power)
+                Devices[UNIT_POWER].Update(0, str_power)
+
+            self.prv_str_power = str_power
         except:
             Domoticz.Log("An error occurred updating power usage")
 
     def _update_gas(self):
         try:
             str_gas = str(self.my_toon.gas.daily_usage)
-            if self.print_debug_log:
-                Domoticz.Log("Update gas usage: " + str_gas)
-            Devices[UNIT_GAS].Update(0, str_gas)
+
+            if str_gas != self.prv_str_gas:
+                if self.print_debug_log:
+                    Domoticz.Log("Update gas usage: " + str_gas)
+                Devices[UNIT_GAS].Update(0, str_gas)
+
+            self.prv_str_gas = str_gas
         except:
             Domoticz.Log("An error occurred updating gas usage")
 
     def _update_temperature(self):
         try:
             str_temp = str(self.my_toon.temperature)
-            if self.print_debug_log:
-                Domoticz.Log("Update temperature: " + str_temp)
-            Devices[UNIT_TEMPERATURE].Update(0, str_temp)
+
+            if str_temp != self.prv_str_temp:
+                if self.print_debug_log:
+                    Domoticz.Log("Update temperature: " + str_temp)
+                Devices[UNIT_TEMPERATURE].Update(0, str_temp)
+
+            self.prv_str_temp = str_temp
         except:
             Domoticz.Log("An error occurred updating temperature")
 
     def _update_set_point(self):
         try:
             str_set_point = str(self.my_toon.thermostat)
-            if self.print_debug_log:
-                Domoticz.Log("Update set point: " + str_set_point)
-            Devices[UNIT_SET_POINT].Update(0, str_set_point)
+
+            if str_set_point != self.prv_str_set_point:
+                if self.print_debug_log:
+                    Domoticz.Log("Update set point: " + str_set_point)
+                Devices[UNIT_SET_POINT].Update(0, str_set_point)
+
+            self.prv_str_set_point = str_set_point
         except:
             Domoticz.Log("An error occurred updating thermostat set point")
 
@@ -275,8 +300,6 @@ class ToonApiLibPlugin:
                 Domoticz.Log("An error occurred updating burner state")
 
             if str_burner_state != "":
-                if self.print_debug_log:
-                    Domoticz.Log("Update state: " + str_burner_state)
 
                 if str_burner_state == "on":
                     heating_on = 1
@@ -285,10 +308,14 @@ class ToonApiLibPlugin:
                 elif str_burner_state == "pre_heating":
                     preheating_on = 1
 
-                Devices[UNIT_HEATING_ACTIVE].Update(heating_on, str(heating_on))
-                Devices[UNIT_HOT_WATER_ACTIVE].Update(hot_water_on, str(hot_water_on))
-                Devices[UNIT_PREHEAT_ACTIVE].Update(preheating_on, str(preheating_on))
+                if str_burner_state != self.prv_str_burner_state:
+                    if self.print_debug_log:
+                        Domoticz.Log("Update state: " + str_burner_state)
+                    Devices[UNIT_HEATING_ACTIVE].Update(heating_on, str(heating_on))
+                    Devices[UNIT_HOT_WATER_ACTIVE].Update(hot_water_on, str(hot_water_on))
+                    Devices[UNIT_PREHEAT_ACTIVE].Update(preheating_on, str(preheating_on))
 
+                self.prv_str_burner_state = str_burner_state
         except:
             Domoticz.Log("An error occurred updating burner state")
 
@@ -303,10 +330,13 @@ class ToonApiLibPlugin:
                 str_thermostat_state = str(self.my_toon.thermostat_state.name)
 
             if str_thermostat_state != "":
-                if self.print_debug_log:
-                    Domoticz.Log("Update state: " + str_thermostat_state + " - " +
-                                 str(self.get_scene_value(str_thermostat_state)))
-                Devices[UNIT_SCENE].Update(2, str(self.get_scene_value(str_thermostat_state)))
+                if str_thermostat_state != self.prv_str_thermostat_state:
+                    if self.print_debug_log:
+                        Domoticz.Log("Update state: " + str_thermostat_state + " - " +
+                                     str(self.get_scene_value(str_thermostat_state)))
+                    Devices[UNIT_SCENE].Update(2, str(self.get_scene_value(str_thermostat_state)))
+
+                self.prv_str_thermostat_state = str_thermostat_state
         except:
             Domoticz.Log("An error occurred updating thermostat state")
 
@@ -316,18 +346,25 @@ class ToonApiLibPlugin:
             if self.my_toon.program_state != "off":
                 program_state = 1
 
-            if self.print_debug_log:
-                Domoticz.Log("Update program state: " + str(program_state))
-            Devices[UNIT_PROGRAM_STATE].Update(program_state, str(program_state))
+            if program_state != self.prv_program_state:
+                if self.print_debug_log:
+                    Domoticz.Log("Update program state: " + str(program_state))
+                Devices[UNIT_PROGRAM_STATE].Update(program_state, str(program_state))
+
+            self.prv_program_state = program_state
         except:
             Domoticz.Log("An error occurred updating program state")
 
     def _update_modulation_level(self):
         try:
             modulation_level = self.my_toon.thermostat_info.current_modulation_level
-            if self.print_debug_log:
-                Domoticz.Log("Update modulation level: " + str(modulation_level))
-            Devices[UNIT_MODULATION_LEVEL].Update(modulation_level, str(modulation_level))
+
+            if modulation_level != self.prv_modulation_level:
+                if self.print_debug_log:
+                    Domoticz.Log("Update modulation level: " + str(modulation_level))
+                Devices[UNIT_MODULATION_LEVEL].Update(modulation_level, str(modulation_level))
+
+            self.prv_modulation_level = modulation_level
         except:
             Domoticz.Log("An error occurred updating modulation level")
 
