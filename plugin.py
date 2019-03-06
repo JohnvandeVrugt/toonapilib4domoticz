@@ -84,8 +84,10 @@ class ToonApiLibPlugin:
             if Unit == UNIT_PROGRAM_STATE:
                 str_program_state = str(Command).lower()
                 self.my_toon.program_state = str_program_state
-                Domoticz.Log("set program state " + str_program_state)
-                program_state = 0 if str_program_state is "off" else 1
+                program_state = 0
+                if str_program_state != "off":
+                    program_state = 1
+                Domoticz.Log("set program state " + str_program_state + " - " + str(program_state))
                 Devices[UNIT_PROGRAM_STATE].Update(program_state, str(program_state))
         except:
             Domoticz.Log("An error occurred setting program state")
@@ -148,21 +150,21 @@ class ToonApiLibPlugin:
         if UNIT_HEATING_ACTIVE not in Devices:
             try:
                 Domoticz.Log("Creating Heating active device")
-                Domoticz.Device(Name="Heating active", Unit=UNIT_HEATING_ACTIVE, Type=244, Subtype=62, Switchtype=0).Create()
+                Domoticz.Device(Name="Heating active", Unit=UNIT_HEATING_ACTIVE, Type=244, Subtype=62, Switchtype=0, Image=9).Create()
             except:
                 Domoticz.Log("An error occurred creating Heating active device")
 
         if UNIT_HOT_WATER_ACTIVE not in Devices:
             try:
                 Domoticz.Log("Creating Hot water active device")
-                Domoticz.Device(Name="Hot water active", Unit=UNIT_HOT_WATER_ACTIVE, Type=244, Subtype=62, Switchtype=0).Create()
+                Domoticz.Device(Name="Hot water active", Unit=UNIT_HOT_WATER_ACTIVE, Type=244, Subtype=62, Switchtype=0, Image=9).Create()
             except:
                 Domoticz.Log("An error occurred creating Hot water active device")
 
         if UNIT_PREHEAT_ACTIVE not in Devices:
             try:
                 Domoticz.Log("Creating Preheat active device")
-                Domoticz.Device(Name="Preheat active", Unit=UNIT_PREHEAT_ACTIVE, Type=244, Subtype=62, Switchtype=0).Create()
+                Domoticz.Device(Name="Preheat active", Unit=UNIT_PREHEAT_ACTIVE, Type=244, Subtype=62, Switchtype=0, Image=9).Create()
             except:
                 Domoticz.Log("An error occurred creating Preheat active device")
 
@@ -179,7 +181,7 @@ class ToonApiLibPlugin:
         if UNIT_PROGRAM_STATE not in Devices:
             try:
                 Domoticz.Log("Creating Program state device")
-                Domoticz.Device(Name="Program state", Unit=UNIT_PROGRAM_STATE, Type=244, Subtype=62, Switchtype=0).Create()
+                Domoticz.Device(Name="Program state", Unit=UNIT_PROGRAM_STATE, Type=244, Subtype=62, Switchtype=0, Image=9).Create()
             except:
                 Domoticz.Log("An error occurred creating Program state device")
 
@@ -198,7 +200,7 @@ class ToonApiLibPlugin:
             self._update_set_point()
             self._update_burner_state()
             self._update_thermostat_state()
-            self._update_program_enabled()
+            self._update_program_active()
             self._update_modulation_level()
 
     def _update_power(self):
@@ -289,10 +291,10 @@ class ToonApiLibPlugin:
         except:
             Domoticz.Log("An error occurred updating thermostat state")
 
-    def _update_program_enabled(self):
+    def _update_program_active(self):
         try:
             program_state = 0
-            if self.my_toon.program_state is not 'off':
+            if self.my_toon.program_state != "off":
                 program_state = 1
 
             if self.print_debug_log:
