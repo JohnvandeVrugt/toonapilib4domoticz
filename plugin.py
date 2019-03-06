@@ -13,6 +13,17 @@
         <param field="Password" label="Eneco pass" required="true" password="true"/>
         <param field="Mode1" label="Consumer key" required="true"/>
         <param field="Mode2" label="Consumer secret" required="true" password="true"/>
+        <param field="Mode3" label="Update rate" required="true">
+            <options>
+                <option label="1 minute" value="1"/>
+                <option label="2 minutes" value="2" default="true" />
+                <option label="5 minutes" value="5"/>
+                <option label="10 minutes" value="10"/>
+                <option label="20 minutes" value="20"/>
+                <option label="30 minutes" value="30"/>
+                <option label="60 minutes" value="60"/>
+            </options>
+        </param>
         <param field="Mode6" label="Debug" width="75px">
             <options>
                 <option label="True" value="Debug"/>
@@ -36,11 +47,14 @@ UNIT_SCENE = 8
 UNIT_PROGRAM_STATE = 9
 UNIT_MODULATION_LEVEL = 10
 
+HEARTBEATS_PER_MIN = 6
+
 
 class ToonApiLibPlugin:
     my_toon = None
     heart_beat = 0
     print_debug_log = True
+    heart_bead_mod = 1
 
     def __init__(self):
         return
@@ -51,6 +65,11 @@ class ToonApiLibPlugin:
         self.print_debug_log = Parameters["Mode6"] == "Debug"
         if self.print_debug_log:
             Domoticz.Log("Debug logging is active")
+
+        updates_per_min = 1
+        if Parameters["Mode3"] != "":
+            updates_per_min = int(Parameters["Mode3"])
+        self.heart_bead_mod = HEARTBEATS_PER_MIN * updates_per_min
 
         if self.my_toon is None:
             self._create_toon_object()
@@ -94,7 +113,7 @@ class ToonApiLibPlugin:
 
     def on_heartbeat(self):
         self.heart_beat = self.heart_beat + 1
-        if self.my_toon is not None and self.heart_beat == 12:
+        if self.my_toon is not None and self.heart_beat == self.heart_bead_mod:
             self.heart_beat = 0
             self._update_devices()
 
