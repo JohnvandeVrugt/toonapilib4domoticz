@@ -33,6 +33,8 @@ UNIT_HEATING_ACTIVE = 5
 UNIT_HOT_WATER_ACTIVE = 6
 UNIT_PREHEAT_ACTIVE = 7
 UNIT_SCENE = 8
+UNIT_PROGRAM_STATE = 9
+UNIT_MODULATION_LEVEL = 10
 
 
 class ToonApiLibPlugin:
@@ -64,7 +66,7 @@ class ToonApiLibPlugin:
         try:
             if Unit == UNIT_SET_POINT:
                 self.my_toon.thermostat = Level
-                Domoticz.Log("set level " + str(Level))
+                Domoticz.Log("set set point " + str(Level))
                 Devices[UNIT_SET_POINT].Update(0, str(Level))
         except:
             Domoticz.Log("An error occurred setting thermostat")
@@ -77,6 +79,16 @@ class ToonApiLibPlugin:
                 Devices[UNIT_SCENE].Update(2, str(Level))
         except:
             Domoticz.Log("An error occurred setting scene")
+
+        try:
+            if Unit == UNIT_PROGRAM_STATE:
+                str_program_state = str(Command).lower()
+                self.my_toon.program_state = str_program_state
+                Domoticz.Log("set program state " + str_program_state)
+                program_state = 0 if str_program_state is "off" else 1
+                Devices[UNIT_PROGRAM_STATE].Update(program_state, str(program_state))
+        except:
+            Domoticz.Log("An error occurred setting program state")
 
     def on_heartbeat(self):
         self.heart_beat = self.heart_beat + 1
@@ -164,6 +176,20 @@ class ToonApiLibPlugin:
             except:
                 Domoticz.Log("An error occurred creating Scene device")
 
+        if UNIT_PROGRAM_STATE not in Devices:
+            try:
+                Domoticz.Log("Creating Program state device")
+                Domoticz.Device(Name="Program state", Unit=UNIT_PROGRAM_STATE, Type=244, Subtype=62, Switchtype=0).Create()
+            except:
+                Domoticz.Log("An error occurred creating Program state device")
+
+        if UNIT_MODULATION_LEVEL not in Devices:
+            try:
+                Domoticz.Log("Creating Modulation level device")
+                Domoticz.Device(Name="Modulation level", Unit=UNIT_MODULATION_LEVEL, Type=243, Subtype=6, Switchtype=0).Create()
+            except:
+                Domoticz.Log("An error occurred creating Modulation level device")
+
     def _update_devices(self):
         if self.my_toon is not None:
             self._update_power()
@@ -172,6 +198,8 @@ class ToonApiLibPlugin:
             self._update_set_point()
             self._update_burner_state()
             self._update_thermostat_state()
+            self._update_program_enabled()
+            self._update_modulation_level()
 
     def _update_power(self):
         try:
@@ -261,6 +289,27 @@ class ToonApiLibPlugin:
         except:
             Domoticz.Log("An error occurred updating thermostat state")
 
+    def _update_program_enabled(self):
+        try:
+            program_state = 0
+            if self.my_toon.program_state is not 'off':
+                program_state = 1
+
+            if self.print_debug_log:
+                Domoticz.Log("Update program state: " + str(program_state))
+            Devices[UNIT_PROGRAM_STATE].Update(program_state, str(program_state))
+        except:
+            Domoticz.Log("An error occurred updating program state")
+
+    def _update_modulation_level(self):
+        try:
+            modulation_level = self.my_toon.thermostat_info.current_modulation_level
+            if self.print_debug_log:
+                Domoticz.Log("Update modulation level: " + str(modulation_level))
+            Devices[UNIT_MODULATION_LEVEL].Update(modulation_level, str(modulation_level))
+        except:
+            Domoticz.Log("An error occurred updating modulation level")
+
     @staticmethod
     def get_scene_value(x):
         return {
@@ -288,7 +337,6 @@ class ToonApiLibPlugin:
             str_return_string = "Holiday"
 
         return str_return_string
-
 
 global _plugin
 _plugin = ToonApiLibPlugin()
