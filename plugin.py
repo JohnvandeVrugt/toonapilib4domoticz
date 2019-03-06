@@ -150,49 +150,76 @@ class ToonApiLibPlugin:
         if UNIT_POWER not in Devices:
             try:
                 Domoticz.Log("Creating Power usage device")
-                Domoticz.Device(Name="Power usage", Unit=UNIT_POWER, Type=250, Subtype=1).Create()
+                Domoticz.Device(Name="Power usage",
+                                Unit=UNIT_POWER,
+                                Type=250,
+                                Subtype=1).Create()
             except:
                 Domoticz.Log("An error occurred creating Power usage device")
 
         if UNIT_GAS not in Devices:
             try:
                 Domoticz.Log("Creating Gas usage device")
-                Domoticz.Device(Name="Gas usage", Unit=UNIT_GAS, Type=251, Subtype=2).Create()
+                Domoticz.Device(Name="Gas usage",
+                                Unit=UNIT_GAS,
+                                Type=251,
+                                Subtype=2).Create()
             except:
                 Domoticz.Log("An error occurred creating Gas usage device")
 
         if UNIT_TEMPERATURE not in Devices:
             try:
                 Domoticz.Log("Creating Room temperature device")
-                Domoticz.Device(Name="Room temperature", Unit=UNIT_TEMPERATURE, Type=80, Subtype=5).Create()
+                Domoticz.Device(Name="Room temperature",
+                                Unit=UNIT_TEMPERATURE,
+                                Type=80,
+                                Subtype=5).Create()
             except:
                 Domoticz.Log("An error occurred creating Room temperature device")
 
         if UNIT_SET_POINT not in Devices:
             try:
                 Domoticz.Log("Creating Set point device")
-                Domoticz.Device(Name="Set point", Unit=UNIT_SET_POINT, Type=242, Subtype=1).Create()
+                Domoticz.Device(Name="Set point",
+                                Unit=UNIT_SET_POINT,
+                                Type=242,
+                                Subtype=1).Create()
             except:
                 Domoticz.Log("An error occurred creating Set point device")
 
         if UNIT_HEATING_ACTIVE not in Devices:
             try:
                 Domoticz.Log("Creating Heating active device")
-                Domoticz.Device(Name="Heating active", Unit=UNIT_HEATING_ACTIVE, Type=244, Subtype=62, Switchtype=0, Image=9).Create()
+                Domoticz.Device(Name="Heating active",
+                                Unit=UNIT_HEATING_ACTIVE,
+                                Type=244,
+                                Subtype=62,
+                                Switchtype=0,
+                                Image=9).Create()
             except:
                 Domoticz.Log("An error occurred creating Heating active device")
 
         if UNIT_HOT_WATER_ACTIVE not in Devices:
             try:
                 Domoticz.Log("Creating Hot water active device")
-                Domoticz.Device(Name="Hot water active", Unit=UNIT_HOT_WATER_ACTIVE, Type=244, Subtype=62, Switchtype=0, Image=9).Create()
+                Domoticz.Device(Name="Hot water active",
+                                Unit=UNIT_HOT_WATER_ACTIVE,
+                                Type=244,
+                                Subtype=62,
+                                Switchtype=0,
+                                Image=9).Create()
             except:
                 Domoticz.Log("An error occurred creating Hot water active device")
 
         if UNIT_PREHEAT_ACTIVE not in Devices:
             try:
                 Domoticz.Log("Creating Preheat active device")
-                Domoticz.Device(Name="Preheat active", Unit=UNIT_PREHEAT_ACTIVE, Type=244, Subtype=62, Switchtype=0, Image=9).Create()
+                Domoticz.Device(Name="Preheat active",
+                                Unit=UNIT_PREHEAT_ACTIVE,
+                                Type=244,
+                                Subtype=62,
+                                Switchtype=0,
+                                Image=9).Create()
             except:
                 Domoticz.Log("An error occurred creating Preheat active device")
 
@@ -202,21 +229,33 @@ class ToonApiLibPlugin:
                 options = {
                     "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
                     "LevelOffHidden": "true", "SelectorStyle": "0"}
-                Domoticz.Device(Name="Scene", Unit=UNIT_SCENE, TypeName="Selector Switch", Options=options).Create()
+                Domoticz.Device(Name="Scene",
+                                Unit=UNIT_SCENE,
+                                TypeName="Selector Switch",
+                                Options=options).Create()
             except:
                 Domoticz.Log("An error occurred creating Scene device")
 
         if UNIT_PROGRAM_STATE not in Devices:
             try:
                 Domoticz.Log("Creating Program state device")
-                Domoticz.Device(Name="Program state", Unit=UNIT_PROGRAM_STATE, Type=244, Subtype=62, Switchtype=0, Image=9).Create()
+                Domoticz.Device(Name="Program state",
+                                Unit=UNIT_PROGRAM_STATE,
+                                Type=244,
+                                Subtype=62,
+                                Switchtype=0,
+                                Image=9).Create()
             except:
                 Domoticz.Log("An error occurred creating Program state device")
 
         if UNIT_MODULATION_LEVEL not in Devices:
             try:
                 Domoticz.Log("Creating Modulation level device")
-                Domoticz.Device(Name="Modulation level", Unit=UNIT_MODULATION_LEVEL, Type=243, Subtype=6, Switchtype=0).Create()
+                Domoticz.Device(Name="Modulation level",
+                                Unit=UNIT_MODULATION_LEVEL,
+                                Type=243,
+                                Subtype=6,
+                                Switchtype=0).Create()
             except:
                 Domoticz.Log("An error occurred creating Modulation level device")
 
