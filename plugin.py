@@ -25,6 +25,15 @@
 import Domoticz
 import toonapilib
 
+UNIT_POWER = 1
+UNIT_GAS = 2
+UNIT_TEMPERATURE = 3
+UNIT_SET_POINT = 4
+UNIT_HEATING_ACTIVE = 5
+UNIT_HOT_WATER_ACTIVE = 6
+UNIT_PREHEAT_ACTIVE = 7
+UNIT_SCENE = 8
+
 
 class ToonApiLibPlugin:
     my_toon = None
@@ -53,19 +62,19 @@ class ToonApiLibPlugin:
                          str(Command) + "', Level: " + str(Level))
 
         try:
-            if Unit == 4:
+            if Unit == UNIT_SET_POINT:
                 self.my_toon.thermostat = Level
                 Domoticz.Log("set level " + str(Level))
-                Devices[4].Update(0, str(Level))
+                Devices[UNIT_SET_POINT].Update(0, str(Level))
         except:
             Domoticz.Log("An error occurred setting thermostat")
 
         try:
-            if Unit == 8:
+            if Unit == UNIT_SCENE:
                 str_scene = self.get_scene_name(Level)
                 self.my_toon.thermostat_state = str_scene
                 Domoticz.Log("set scene " + str(Level) + " - " + str_scene)
-                Devices[8].Update(2, str(Level))
+                Devices[UNIT_SCENE].Update(2, str(Level))
         except:
             Domoticz.Log("An error occurred setting scene")
 
@@ -96,62 +105,62 @@ class ToonApiLibPlugin:
     def _check_and_create_devices(self):
         Domoticz.Log("Check and create Toon devices")
 
-        if 1 not in Devices:
+        if UNIT_POWER not in Devices:
             try:
                 Domoticz.Log("Creating Power usage device")
-                Domoticz.Device(Name="Power usage", Unit=1, Type=250, Subtype=1).Create()
+                Domoticz.Device(Name="Power usage", Unit=UNIT_POWER, Type=250, Subtype=1).Create()
             except:
                 Domoticz.Log("An error occurred creating Power usage device")
 
-        if 2 not in Devices:
+        if UNIT_GAS not in Devices:
             try:
                 Domoticz.Log("Creating Gas usage device")
-                Domoticz.Device(Name="Gas usage", Unit=2, Type=251, Subtype=2).Create()
+                Domoticz.Device(Name="Gas usage", Unit=UNIT_GAS, Type=251, Subtype=2).Create()
             except:
                 Domoticz.Log("An error occurred creating Gas usage device")
 
-        if 3 not in Devices:
+        if UNIT_TEMPERATURE not in Devices:
             try:
                 Domoticz.Log("Creating Room temperature device")
-                Domoticz.Device(Name="Room temperature", Unit=3, Type=80, Subtype=5).Create()
+                Domoticz.Device(Name="Room temperature", Unit=UNIT_TEMPERATURE, Type=80, Subtype=5).Create()
             except:
                 Domoticz.Log("An error occurred creating Room temperature device")
 
-        if 4 not in Devices:
+        if UNIT_SET_POINT not in Devices:
             try:
                 Domoticz.Log("Creating Set point device")
-                Domoticz.Device(Name="Set point", Unit=4, Type=242, Subtype=1).Create()
+                Domoticz.Device(Name="Set point", Unit=UNIT_SET_POINT, Type=242, Subtype=1).Create()
             except:
                 Domoticz.Log("An error occurred creating Set point device")
 
-        if 5 not in Devices:
+        if UNIT_HEATING_ACTIVE not in Devices:
             try:
                 Domoticz.Log("Creating Heating active device")
-                Domoticz.Device(Name="Heating active", Unit=5, Type=244, Subtype=62, Switchtype=0).Create()
+                Domoticz.Device(Name="Heating active", Unit=UNIT_HEATING_ACTIVE, Type=244, Subtype=62, Switchtype=0).Create()
             except:
                 Domoticz.Log("An error occurred creating Heating active device")
 
-        if 6 not in Devices:
+        if UNIT_HOT_WATER_ACTIVE not in Devices:
             try:
                 Domoticz.Log("Creating Hot water active device")
-                Domoticz.Device(Name="Hot water active", Unit=6, Type=244, Subtype=62, Switchtype=0).Create()
+                Domoticz.Device(Name="Hot water active", Unit=UNIT_HOT_WATER_ACTIVE, Type=244, Subtype=62, Switchtype=0).Create()
             except:
                 Domoticz.Log("An error occurred creating Hot water active device")
 
-        if 7 not in Devices:
+        if UNIT_PREHEAT_ACTIVE not in Devices:
             try:
                 Domoticz.Log("Creating Preheat active device")
-                Domoticz.Device(Name="Preheat active", Unit=7, Type=244, Subtype=62, Switchtype=0).Create()
+                Domoticz.Device(Name="Preheat active", Unit=UNIT_PREHEAT_ACTIVE, Type=244, Subtype=62, Switchtype=0).Create()
             except:
                 Domoticz.Log("An error occurred creating Preheat active device")
 
-        if 8 not in Devices:
+        if UNIT_SCENE not in Devices:
             try:
                 Domoticz.Log("Creating Scene device")
                 options = {
                     "LevelNames": "Unknown|Away|Sleep|Home|Comfort|Holiday",
                     "LevelOffHidden": "true", "SelectorStyle": "0"}
-                Domoticz.Device(Name="Scene", Unit=8, TypeName="Selector Switch", Options=options).Create()
+                Domoticz.Device(Name="Scene", Unit=UNIT_SCENE, TypeName="Selector Switch", Options=options).Create()
             except:
                 Domoticz.Log("An error occurred creating Scene device")
 
@@ -173,7 +182,7 @@ class ToonApiLibPlugin:
                         str(self.my_toon.power.value) + ";" + str(self.my_toon.solar.value)
             if self.print_debug_log:
                 Domoticz.Log("Update power/solar usage: " + str_power)
-            Devices[1].Update(0, str_power)
+            Devices[UNIT_POWER].Update(0, str_power)
         except:
             Domoticz.Log("An error occurred updating power usage")
 
@@ -182,7 +191,7 @@ class ToonApiLibPlugin:
             str_gas = str(self.my_toon.gas.daily_usage)
             if self.print_debug_log:
                 Domoticz.Log("Update gas usage: " + str_gas)
-            Devices[2].Update(0, str_gas)
+            Devices[UNIT_GAS].Update(0, str_gas)
         except:
             Domoticz.Log("An error occurred updating gas usage")
 
@@ -191,7 +200,7 @@ class ToonApiLibPlugin:
             str_temp = str(self.my_toon.temperature)
             if self.print_debug_log:
                 Domoticz.Log("Update temperature: " + str_temp)
-            Devices[3].Update(0, str_temp)
+            Devices[UNIT_TEMPERATURE].Update(0, str_temp)
         except:
             Domoticz.Log("An error occurred updating temperature")
 
@@ -200,7 +209,7 @@ class ToonApiLibPlugin:
             str_set_point = str(self.my_toon.thermostat)
             if self.print_debug_log:
                 Domoticz.Log("Update set point: " + str_set_point)
-            Devices[4].Update(0, str_set_point)
+            Devices[UNIT_SET_POINT].Update(0, str_set_point)
         except:
             Domoticz.Log("An error occurred updating thermostat set point")
 
@@ -227,9 +236,9 @@ class ToonApiLibPlugin:
                 elif str_burner_state == "pre_heating":
                     preheating_on = 1
 
-                Devices[5].Update(heating_on, str(heating_on))
-                Devices[6].Update(hot_water_on, str(hot_water_on))
-                Devices[7].Update(preheating_on, str(preheating_on))
+                Devices[UNIT_HEATING_ACTIVE].Update(heating_on, str(heating_on))
+                Devices[UNIT_HOT_WATER_ACTIVE].Update(hot_water_on, str(hot_water_on))
+                Devices[UNIT_PREHEAT_ACTIVE].Update(preheating_on, str(preheating_on))
 
         except:
             Domoticz.Log("An error occurred updating burner state")
@@ -248,7 +257,7 @@ class ToonApiLibPlugin:
                 if self.print_debug_log:
                     Domoticz.Log("Update state: " + str_thermostat_state + " - " +
                                  str(self.get_scene_value(str_thermostat_state)))
-                Devices[8].Update(2, str(self.get_scene_value(str_thermostat_state)))
+                Devices[UNIT_SCENE].Update(2, str(self.get_scene_value(str_thermostat_state)))
         except:
             Domoticz.Log("An error occurred updating thermostat state")
 
