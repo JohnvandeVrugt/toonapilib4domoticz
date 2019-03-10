@@ -29,15 +29,18 @@ class DeviceProgramState(Device):
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
         return self
 
-    def on_command(self, Unit, Command, Level, Hue):
+    def on_command(self, unit, command, level, hue):
         try:
-            str_program_state = str(Command).lower()
+            str_program_state = str(command).lower()
             super().toon.program_state = str_program_state
+
             program_state = 0
             if str_program_state != "off":
                 program_state = 1
-                if self.debug:
-                    Domoticz.Log("set program state " + str_program_state + " - " + str(program_state))
+
+            if self.debug:
+                Domoticz.Log("set program state " + str_program_state + " - " + str(program_state))
+
             super().devices[super().unit].Update(program_state, str(program_state))
 
         except DeviceCommandException as ex:

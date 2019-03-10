@@ -36,16 +36,8 @@
 import Domoticz
 import toonapilib
 
-from devices.power import DevicePower
-from devices.gas import DeviceGas
-from devices.temperature import DeviceTemperature
-from devices.set_point import DeviceSetPoint
-from devices.heating_active import DeviceHeatingActive
-from devices.hotwater_active import DeviceHotWaterActive
-from devices.preheat_active import DevicePreHeatActive
-from devices.thermostat_state import DeviceThermostatState
-from devices.modulation_level import DeviceModulationLevel
-from devices.program_state import DeviceProgramState
+
+from devices.device_factory import DeviceFactory
 
 UNIT_POWER = 1
 UNIT_GAS = 2
@@ -66,6 +58,7 @@ class ToonApiLibPlugin:
     _heart_beat = 0
     _debug = True
     _heart_bead_mod = 1
+    _toon_devices = None
 
     def __init__(self):
         return
@@ -85,18 +78,14 @@ class ToonApiLibPlugin:
         if self._my_toon is None:
             self._create_toon_object()
 
-        self._check_and_create_devices()
+        self._toon_devices = DeviceFactory.create_devices(self._my_toon, Devices, self._debug)
         self._update_devices()
 
     def on_command(self, Unit, Command, Level, Hue):
         if self._debug:
             Domoticz.Log("onCommand called for Unit " + str(Unit) + ": Parameter '" +
                          str(Command) + "', Level: " + str(Level))
-
-        dev = next((device for device in self._devices
-                    if device.unit == Unit), None)
-        if dev is not None:
-            dev.on_command(Unit, Command, Level, Hue)
+        self._toon_devices.on_command(Unit, Command, Level, Hue)
 
     def on_heartbeat(self):
         self._heart_beat = self._heart_beat + 1
@@ -123,25 +112,9 @@ class ToonApiLibPlugin:
             Domoticz.Log("* Check your credentials")
             Domoticz.Log("* Restart Domoticz")
 
-    def _check_and_create_devices(self):
-        if self._debug:
-            Domoticz.Log("Check and create Toon devices")
-        self._devices = []
-        self._devices.append(DevicePower("Power usage", UNIT_POWER, Devices, self._my_toon, self._debug).create())
-        self._devices.append(DeviceGas("Gas usage", UNIT_GAS, Devices, self._my_toon, self._debug).create())
-        self._devices.append(DeviceTemperature("Room temperature", UNIT_TEMPERATURE, Devices, self._my_toon, self._debug).create())
-        self._devices.append(DeviceSetPoint("Set point", UNIT_SET_POINT, Devices, self._my_toon, self._debug).create())
-        self._devices.append(DeviceHeatingActive("Heating active", UNIT_HEATING_ACTIVE, Devices, self._my_toon, self._debug).create())
-        self._devices.append(DeviceHotWaterActive("Hot water active", UNIT_HOT_WATER_ACTIVE, Devices, self._my_toon, self._debug).create())
-        self._devices.append(DevicePreHeatActive("Preheat active", UNIT_PREHEAT_ACTIVE, Devices, self._my_toon, self._debug).create())
-        self._devices.append(DeviceThermostatState("Scene", UNIT_SCENE, Devices, self._my_toon, self._debug).create())
-        self._devices.append(DeviceProgramState("Program state", UNIT_PROGRAM_STATE, Devices, self._my_toon, self._debug).create())
-        self._devices.append(DeviceModulationLevel("Modulation level", UNIT_MODULATION_LEVEL, Devices, self._my_toon, self._debug).create())
-
     def _update_devices(self):
         if self._my_toon is not None:
-            for my_device in self._devices:
-                my_device.update()
+            self._toon_devices.update()
 
 
 global _plugin

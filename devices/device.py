@@ -45,7 +45,7 @@ class Device:
     def set_previous_value(self, str_new_value):
         self._previous_value = str_new_value
 
-    def on_command(self, Unit, Command, Level, Hue):
+    def on_command(self, unit, command, level, hue):
         return
 
     def update(self):

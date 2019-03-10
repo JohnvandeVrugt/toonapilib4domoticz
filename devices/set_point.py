@@ -26,12 +26,12 @@ class DeviceSetPoint(Device):
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
         return self
 
-    def on_command(self, Unit, Command, Level, Hue):
+    def on_command(self, unit, command, level, hue):
         try:
-            self.toon.thermostat = Level
+            self.toon.thermostat = level
             if self.debug:
-                Domoticz.Log("set set point " + str(Level))
-            self.devices[Unit].Update(0, str(Level))
+                Domoticz.Log("set set point " + str(level))
+            self.devices[unit].Update(0, str(level))
 
         except DeviceCommandException as ex:
             Domoticz.Log("An error occurred setting " + self.name)

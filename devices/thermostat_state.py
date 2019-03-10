@@ -27,14 +27,14 @@ class DeviceThermostatState(Device):
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
         return self
 
-    def on_command(self, Unit, Command, Level, Hue):
+    def on_command(self, unit, command, level, hue):
         try:
-            str_scene = self.get_scene_name(Level)
+            str_scene = self.get_scene_name(level)
             self.toon.thermostat_state = str_scene
 
             if self.debug:
-                Domoticz.Log("set scene " + str(Level) + " - " + str_scene)
-            self.devices[self.unit].Update(2, str(Level))
+                Domoticz.Log("set scene " + str(level) + " - " + str_scene)
+            self.devices[self.unit].Update(2, str(level))
 
         except DeviceCommandException as ex:
             Domoticz.Log("An error occurred setting " + self.name)
