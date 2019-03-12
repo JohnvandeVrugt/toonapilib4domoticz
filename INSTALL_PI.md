@@ -36,3 +36,5 @@ The plugin will generate the following devices:
 * Switch, "Hot water active"
 * Switch, "Preheat active"
 * Selector, "States"
+* Switch, "Program state"
+* Percentage, "Modulation level"
