@@ -17,7 +17,7 @@ Further reading: https://developer.toon.eu.
 ### Add the toonapi4domoticz plugin
 * Create a subfolder named 'plugins' in the installation folder of Domoticz, e.g. c:\program files(x86)\domoticz\plugins.
 * Create a subfolder in the domoticz plugins folder, eg. c:\program files(x86)\domoticz\plugins\toonapilib4domoticz.
-* Copy the plugin.py file of this repository into the subfolder.
+* Copy the plugin.py file and the devices folder of this repository into the subfolder.
 * Restart the domoticz service.
 
 ### Setup the plugin within Domoticz

@@ -14,7 +14,7 @@ The -U flag updates toonapilib to the latest version.
 * `git clone https://github.com/JohnvandeVrugt/toonapilib4domoticz`.<br>
 Or alternatively
 * Create a subfolder in the domoticz/plugins folder, eg. /home/pi/dev-domoticz/plugins/toonapilib4domoticz.
-* Copy the plugin.py file of this repository into the subfolder.
+* Copy the plugin.py file and the devices folder of this repository into the subfolder.
 * Restart the domoticz service `sudo service domoticz restart`.
 
 ### Setup the plugin within Domoticz
