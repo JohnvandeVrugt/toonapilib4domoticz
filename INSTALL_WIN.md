@@ -15,9 +15,9 @@ Further reading: https://developer.toon.eu.
 * Install the toonapilib: `pip install toonapilib -U` The -U flag updates toonapilib to the latest version.
 
 ### Add the toonapi4domoticz plugin
-* Create a subfolder named 'plugins' in the installation folder of Domoticz, e.g. c:\program files(x86)\domoticz\plugins.
-* Create a subfolder in the domoticz plugins folder, eg. c:\program files(x86)\domoticz\plugins\toonapilib4domoticz.
-* Copy the plugin.py file and the devices folder of this repository into the subfolder.
+* Create a sub folder named 'plugins' in the installation folder of Domoticz, e.g. c:\program files(x86)\domoticz\plugins.
+* Create a sub folder in the domoticz plugins folder, eg. c:\program files(x86)\domoticz\plugins\toonapilib4domoticz.
+* Copy the plugin.py file and the devices folder of this repository into the sub folder.
 * Restart the domoticz service.
 
 ### Setup the plugin within Domoticz
