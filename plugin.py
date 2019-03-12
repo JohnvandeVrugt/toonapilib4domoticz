@@ -54,10 +54,10 @@ HEARTBEATS_PER_MIN = 6
 
 
 class ToonApiLibPlugin:
-    _my_toon = None
-    _heart_beat = 0
     _debug = True
+    _heart_beat = 0
     _heart_bead_mod = 1
+    _my_toon = None
     _toon_devices = None
 
     def __init__(self):

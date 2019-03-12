@@ -6,8 +6,8 @@ from devices.device import DeviceUpdateException
 
 
 class DeviceThermostatState(Device):
-    def __init__(self, name, unit, devices, toon, debug):
-        super().__init__(name, unit, devices, toon, debug)
+    def __init__(self, name, unit, plugin_devices, toon, debug):
+        super().__init__(name, unit, plugin_devices, toon, debug)
 
     def create(self):
         if not self.exists:
@@ -34,7 +34,7 @@ class DeviceThermostatState(Device):
 
             if self.debug:
                 Domoticz.Log("set scene " + str(level) + " - " + str_scene)
-            self.devices[self.unit].Update(2, str(level))
+            self.plugin_devices[self.unit].Update(2, str(level))
 
         except DeviceCommandException as ex:
             Domoticz.Log("An error occurred setting " + self.name)
@@ -53,7 +53,7 @@ class DeviceThermostatState(Device):
             if str_value != "" and str_value != self.previous_value:
                 if self.debug:
                     Domoticz.Log("Update thermostat state: " + str_value)
-                self.devices[self.unit].Update(2, str(self.get_scene_value(str_value)))
+                self.plugin_devices[self.unit].Update(2, str(self.get_scene_value(str_value)))
 
         except DeviceUpdateException as ex:
             Domoticz.Log("An error occurred updating " + self.name)

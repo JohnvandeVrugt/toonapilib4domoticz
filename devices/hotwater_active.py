@@ -10,8 +10,8 @@ class DeviceHotWaterActive(Device):
     domoticz_switch_type = 0,
     domoticz_image = 9
 
-    def __init__(self, name, unit, devices, toon, debug):
-        super().__init__(name, unit, devices, toon, debug)
+    def __init__(self, name, unit, plugin_devices, toon, debug):
+        super().__init__(name, unit, plugin_devices, toon, debug)
 
     def create(self):
         if not super().exists:
@@ -39,7 +39,7 @@ class DeviceHotWaterActive(Device):
             if str_value != self.previous_value:
                 if self.debug:
                     Domoticz.Log("Update hot water active: " + str_value)
-                self.devices[self.unit].Update(hot_water_on, str(hot_water_on))
+                self.plugin_devices[self.unit].Update(hot_water_on, str(hot_water_on))
 
         except DeviceUpdateException as ex:
             Domoticz.Log("An error occurred updating " + self.name)

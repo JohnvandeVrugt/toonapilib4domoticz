@@ -10,13 +10,13 @@ class DevicePreHeatActive(Device):
     domoticz_switch_type = 0,
     domoticz_image = 9
 
-    def __init__(self, name, unit, devices, toon, debug):
-        super().__init__(name, unit, devices, toon, debug)
+    def __init__(self, name, unit, plugin_devices, toon, debug):
+        super().__init__(name, unit, plugin_devices, toon, debug)
 
     def create(self):
         if not self.exists:
             try:
-                Domoticz.Log("Creating pre heat active device " + super().name)
+                Domoticz.Log("Creating pre heat active device " + self.name)
                 Domoticz.Device(Name=self.name, Unit=self.unit, Type=self.domoticz_device_type,
                                 Subtype=self.domoticz_subtype, Switchtype=self.domoticz_switch_type,
                                 Image=self.domoticz_image).Create()
@@ -39,7 +39,7 @@ class DevicePreHeatActive(Device):
             if str_value != self.previous_value:
                 if self.debug:
                     Domoticz.Log("Update pre heat active: " + str_value)
-                self.devices[self.unit].Update(pre_heat_on, str(pre_heat_on))
+                self.plugin_devices[self.unit].Update(pre_heat_on, str(pre_heat_on))
 
         except DeviceUpdateException as ex:
             Domoticz.Log("An error occurred updating " + self.name)

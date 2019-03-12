@@ -9,13 +9,13 @@ class DeviceModulationLevel(Device):
     domoticz_subtype = 6,
     domoticz_switch_type = 0
 
-    def __init__(self, name, unit, devices, toon, debug):
-        super().__init__(name, unit, devices, toon, debug)
+    def __init__(self, name, unit, plugin_devices, toon, debug):
+        super().__init__(name, unit, plugin_devices, toon, debug)
 
     def create(self):
         if not self.exists:
             try:
-                Domoticz.Log("Creating modulation level device " + super().name)
+                Domoticz.Log("Creating modulation level device " + self.name)
                 Domoticz.Device(Name=self.name, Unit=self.unit, Type=self.domoticz_device_type,
                                 Subtype=self.domoticz_subtype, Switchtype=self.domoticz_switch_type).Create()
 
@@ -37,7 +37,7 @@ class DeviceModulationLevel(Device):
             if str_value != self.previous_value:
                 if self.debug:
                     Domoticz.Log("Update modulation level: " + str_value)
-                self.devices[self.unit].Update(modulation_level, str_value)
+                self.plugin_devices[self.unit].Update(modulation_level, str_value)
 
         except DeviceUpdateException as ex:
             Domoticz.Log("An error occurred updating " + self.name)

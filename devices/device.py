@@ -5,10 +5,10 @@ import toonapilib
 class Device:
     _previous_value = ""
 
-    def __init__(self, name, unit, devices, toon, debug):
+    def __init__(self, name, unit, plugin_devices, toon, debug):
         self._name = name
         self._unit = unit
-        self._devices = devices
+        self._plugin_devices = plugin_devices
         self._toon = toon
         self._debug = debug
         self._previous_value = ""
@@ -18,13 +18,12 @@ class Device:
         return self._debug
 
     @property
-    def devices(self):
-        return self._devices
+    def plugin_devices(self):
+        return self._plugin_devices
 
     @property
     def exists(self):
-        Domoticz.Log("Check existence of " + self._name)
-        return self._unit in self._devices
+        return self._unit in self._plugin_devices
 
     @property
     def name(self):

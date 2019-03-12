@@ -9,8 +9,8 @@ class DeviceSetPoint(Device):
     domoticz_device_type = 242
     domoticz_subtype = 1
 
-    def __init__(self, name, unit, devices, toon, debug):
-        super().__init__(name, unit, devices, toon, debug)
+    def __init__(self, name, unit, plugin_devices, toon, debug):
+        super().__init__(name, unit, plugin_devices, toon, debug)
 
     def create(self):
         if not self.exists:
@@ -20,7 +20,7 @@ class DeviceSetPoint(Device):
                                 Subtype=self.domoticz_subtype).Create()
 
             except DeviceCreateException as ex:
-                Domoticz.Log("An error occurred creating " + super().name)
+                Domoticz.Log("An error occurred creating " + self.name)
                 Domoticz.Log("Exception: " + str(ex))
         elif self.debug:
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
@@ -31,7 +31,7 @@ class DeviceSetPoint(Device):
             self.toon.thermostat = level
             if self.debug:
                 Domoticz.Log("set set point " + str(level))
-            self.devices[unit].Update(0, str(level))
+            self.plugin_devices[unit].Update(0, str(level))
 
         except DeviceCommandException as ex:
             Domoticz.Log("An error occurred setting " + self.name)
@@ -47,10 +47,10 @@ class DeviceSetPoint(Device):
             if str_value != self.previous_value:
                 if self.debug:
                     Domoticz.Log("Update set point: " + str_value)
-                self.devices[self.unit].Update(0, str_value)
+                self.plugin_devices[self.unit].Update(0, str_value)
 
         except DeviceUpdateException as ex:
-            Domoticz.Log("An error occurred updating " + super().name)
+            Domoticz.Log("An error occurred updating " + self.name)
             Domoticz.Log("Exception: " + str(ex))
 
         self.set_previous_value(str_value)
