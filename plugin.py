@@ -35,8 +35,6 @@
 """
 import Domoticz
 import toonapilib
-
-
 from devices.device_factory import DeviceFactory
 
 HEARTBEATS_PER_MIN = 6
