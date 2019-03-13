@@ -9,12 +9,11 @@ class DevicePower(Device):
     domoticz_device_type = 250
     domoticz_subtype = 1
 
-    def __init__(self, plugin_devices, toon, debug):
+    def __init__(self, plugin_devices, toon):
         super().__init__(config.STR_UNIT_POWER,
                          config.STD_UNIT_POWER,
                          plugin_devices,
-                         toon,
-                         debug)
+                         toon)
 
     def create(self):
         if not self.exists:
@@ -27,7 +26,7 @@ class DevicePower(Device):
                 Domoticz.Log("An error occurred creating " + self.name)
                 Domoticz.Log("Exception: " + str(ex))
 
-        elif self.debug:
+        elif config.debug:
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
         return self
 
@@ -42,7 +41,7 @@ class DevicePower(Device):
                                                          self.toon.solar.meter_reading_produced,
                                                          self.toon.power.value, self.toon.solar.value)
             if str_value != self.previous_value:
-                if self.debug:
+                if config.debug:
                     Domoticz.Log("Update power/solar usage: " + str_value)
                 self.plugin_devices[self.unit].Update(0, str_value)
 

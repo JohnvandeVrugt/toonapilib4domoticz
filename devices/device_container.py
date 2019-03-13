@@ -14,16 +14,11 @@ class Singleton(type):
 class DeviceContainer(metaclass=Singleton):
 
     def __init__(self):
-        self._debug = False
         self._devices = []
 
     @property
     def devices(self):
         return self._devices
-
-    @property
-    def debug(self):
-        return self._debug
 
     def add_device(self, device):
         self._devices.append(device)
@@ -33,9 +28,6 @@ class DeviceContainer(metaclass=Singleton):
                     if device.unit == unit), None)
         if dev is not None:
             dev.on_command(unit, command, level, hue)
-
-    def set_debug(self, on_off):
-        self._debug = on_off
 
     def update(self):
         for my_device in self._devices:

@@ -1,4 +1,15 @@
-class Configuration:
+import Domoticz
+
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class Configuration(metaclass=Singleton):
     STD_UNIT_POWER = 1
     STD_UNIT_GAS = 2
     STD_UNIT_TEMPERATURE = 3
@@ -20,6 +31,17 @@ class Configuration:
     STR_UNIT_SCENE = "Scene"
     STR_UNIT_PROGRAM_STATE = "Program state"
     STR_UNIT_MODULATION_LEVEL = "Modulation level"
+
+    _debug = False
+
+    @property
+    def debug(self):
+        return self._debug
+
+    def set_debug(self, on_off):
+        self._debug = on_off
+        str_on_off = "on" if on_off else "off"
+        Domoticz.Log("Debug logging is " + str_on_off)
 
 
 config = Configuration()

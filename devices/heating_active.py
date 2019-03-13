@@ -11,12 +11,11 @@ class DeviceHeatingActive(Device):
     domoticz_switch_type = 0
     domoticz_image = 9
 
-    def __init__(self, plugin_devices, toon, debug):
+    def __init__(self, plugin_devices, toon):
         super().__init__(config.STR_UNIT_HEATING_ACTIVE,
                          config.STD_UNIT_HEATING_ACTIVE,
                          plugin_devices,
-                         toon,
-                         debug)
+                         toon)
 
     def create(self):
         if not self.exists:
@@ -29,7 +28,7 @@ class DeviceHeatingActive(Device):
             except DeviceCreateException as ex:
                 Domoticz.Log("An error occurred creating " + self.name)
                 Domoticz.Log("Exception: " + str(ex))
-        elif self.debug:
+        elif config.debug:
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
         return self
 
@@ -42,7 +41,7 @@ class DeviceHeatingActive(Device):
             str_value = str(heating_on)
 
             if str_value != self.previous_value:
-                if self.debug:
+                if config.debug:
                     Domoticz.Log("Update heating active: " + str_value)
                 self.plugin_devices[self.unit].Update(heating_on, str(heating_on))
 

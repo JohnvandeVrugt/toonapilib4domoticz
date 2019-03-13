@@ -10,12 +10,11 @@ class DeviceModulationLevel(Device):
     domoticz_subtype = 6
     domoticz_switch_type = 0
 
-    def __init__(self, plugin_devices, toon, debug):
+    def __init__(self, plugin_devices, toon):
         super().__init__(config.STR_UNIT_MODULATION_LEVEL,
                          config.STD_UNIT_MODULATION_LEVEL,
                          plugin_devices,
-                         toon,
-                         debug)
+                         toon)
 
     def create(self):
         if not self.exists:
@@ -27,7 +26,7 @@ class DeviceModulationLevel(Device):
             except DeviceCreateException as ex:
                 Domoticz.Log("An error occurred creating " + self.name)
                 Domoticz.Log("Exception: " + str(ex))
-        elif self.debug:
+        elif config.debug:
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
         return self
 
@@ -40,7 +39,7 @@ class DeviceModulationLevel(Device):
             str_value = str(modulation_level)
 
             if str_value != self.previous_value:
-                if self.debug:
+                if config.debug:
                     Domoticz.Log("Update modulation level: " + str_value)
                 self.plugin_devices[self.unit].Update(modulation_level, str_value)
 

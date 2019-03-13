@@ -12,12 +12,11 @@ class DeviceProgramState(Device):
     domoticz_switch_type = 0
     domoticz_image = 9
 
-    def __init__(self, plugin_devices, toon, debug):
+    def __init__(self, plugin_devices, toon):
         super().__init__(config.STR_UNIT_PROGRAM_STATE,
                          config.STD_UNIT_PROGRAM_STATE,
                          plugin_devices,
-                         toon,
-                         debug)
+                         toon)
 
     def create(self):
         if not self.exists:
@@ -30,7 +29,7 @@ class DeviceProgramState(Device):
             except DeviceCreateException as ex:
                 Domoticz.Log("An error occurred creating " + self.name)
                 Domoticz.Log("Exception: " + str(ex))
-        elif self.debug:
+        elif config.debug:
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
         return self
 
@@ -43,7 +42,7 @@ class DeviceProgramState(Device):
             if str_program_state != "off":
                 program_state = 1
 
-            if self.debug:
+            if config.debug:
                 Domoticz.Log("set program state " + str_program_state + " - " + str(program_state))
 
             self.plugin_devices[self.unit].Update(program_state, str(program_state))
@@ -64,7 +63,7 @@ class DeviceProgramState(Device):
             str_value = str(program_state)
 
             if str_value != self.previous_value:
-                if self.debug:
+                if config.debug:
                     Domoticz.Log("Update program state: " + str_value)
                 self.plugin_devices[self.unit].Update(program_state, str_value)
 

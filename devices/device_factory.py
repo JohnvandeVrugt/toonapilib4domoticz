@@ -18,20 +18,19 @@ class DeviceFactory:
         return
 
     @staticmethod
-    def create_devices(toon, plugin_devices, debug):
+    def create_devices(toon, plugin_devices):
         Domoticz.Log("Check and create Toon devices")
-        container.set_debug(debug)
 
         """Adding standard devices"""
-        container.add_device(DevicePower(plugin_devices, toon, debug).create())
-        container.add_device(DeviceGas(plugin_devices, toon, debug).create())
-        container.add_device(DeviceTemperature(plugin_devices, toon, debug).create())
-        container.add_device(DeviceSetPoint(plugin_devices, toon, debug).create())
-        container.add_device(DeviceHeatingActive(plugin_devices, toon, debug).create())
-        container.add_device(DeviceHotWaterActive(plugin_devices, toon, debug).create())
-        container.add_device(DevicePreHeatActive(plugin_devices, toon, debug).create())
-        container.add_device(DeviceThermostatState(plugin_devices, toon, debug).create())
-        container.add_device(DeviceProgramState(plugin_devices, toon, debug).create())
-        container.add_device(DeviceModulationLevel(plugin_devices, toon, debug).create())
+        container.add_device(DevicePower(plugin_devices, toon).create())
+        container.add_device(DeviceGas(plugin_devices, toon).create())
+        container.add_device(DeviceTemperature(plugin_devices, toon).create())
+        container.add_device(DeviceSetPoint(plugin_devices, toon).create())
+        container.add_device(DeviceHeatingActive(plugin_devices, toon).create())
+        container.add_device(DeviceHotWaterActive(plugin_devices, toon).create())
+        container.add_device(DevicePreHeatActive(plugin_devices, toon).create())
+        container.add_device(DeviceThermostatState(plugin_devices, toon).create())
+        container.add_device(DeviceProgramState(plugin_devices, toon).create())
+        container.add_device(DeviceModulationLevel(plugin_devices, toon).create())
 
         return container

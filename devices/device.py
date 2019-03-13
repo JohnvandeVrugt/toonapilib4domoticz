@@ -5,17 +5,12 @@ import toonapilib
 class Device:
     _previous_value = ""
 
-    def __init__(self, name, unit, plugin_devices, toon, debug):
+    def __init__(self, name, unit, plugin_devices, toon):
         self._name = name
         self._unit = unit
         self._plugin_devices = plugin_devices
         self._toon = toon
-        self._debug = debug
         self._previous_value = ""
-
-    @property
-    def debug(self):
-        return self._debug
 
     @property
     def plugin_devices(self):

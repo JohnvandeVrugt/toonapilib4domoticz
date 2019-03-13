@@ -7,12 +7,11 @@ from devices.device import DeviceUpdateException
 
 
 class DeviceThermostatState(Device):
-    def __init__(self, plugin_devices, toon, debug):
+    def __init__(self, plugin_devices, toon):
         super().__init__(config.STR_UNIT_SCENE,
                          config.STD_UNIT_SCENE,
                          plugin_devices,
-                         toon,
-                         debug)
+                         toon)
 
     def create(self):
         if not self.exists:
@@ -28,7 +27,7 @@ class DeviceThermostatState(Device):
             except DeviceCreateException as ex:
                 Domoticz.Log("An error occurred creating " + self.name)
                 Domoticz.Log("Exception: " + str(ex))
-        elif self.debug:
+        elif config.debug:
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
         return self
 
@@ -37,7 +36,7 @@ class DeviceThermostatState(Device):
             str_scene = self.get_scene_name(level)
             self.toon.thermostat_state = str_scene
 
-            if self.debug:
+            if config.debug:
                 Domoticz.Log("set scene " + str(level) + " - " + str_scene)
             self.plugin_devices[self.unit].Update(2, str(level))
 
@@ -56,7 +55,7 @@ class DeviceThermostatState(Device):
                 str_value = str(self.toon.thermostat_state.name)
 
             if str_value != "" and str_value != self.previous_value:
-                if self.debug:
+                if config.debug:
                     Domoticz.Log("Update thermostat state: " + str_value)
                 self.plugin_devices[self.unit].Update(2, str(self.get_scene_value(str_value)))
 

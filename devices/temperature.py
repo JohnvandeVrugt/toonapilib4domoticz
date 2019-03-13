@@ -9,12 +9,11 @@ class DeviceTemperature(Device):
     domoticz_device_type = 80
     domoticz_subtype = 5
 
-    def __init__(self, plugin_devices, toon, debug):
+    def __init__(self, plugin_devices, toon):
         super().__init__(config.STR_UNIT_TEMPERATURE,
                          config.STD_UNIT_TEMPERATURE,
                          plugin_devices,
-                         toon,
-                         debug)
+                         toon)
 
     def create(self):
         if not self.exists:
@@ -26,7 +25,7 @@ class DeviceTemperature(Device):
             except DeviceCreateException as ex:
                 Domoticz.Log("An error occurred creating " + self.name)
                 Domoticz.Log("Exception: " + str(ex))
-        elif self.debug:
+        elif config.debug:
             Domoticz.Log("Unit " + str(self.unit) + " exists - nothing to do")
         return self
 
@@ -38,7 +37,7 @@ class DeviceTemperature(Device):
             str_value = str(self.toon.temperature)
 
             if str_value != self.previous_value:
-                if self.debug:
+                if config.debug:
                     Domoticz.Log("Update temperature: " + str_value)
                 self.plugin_devices[self.unit].Update(0, str_value)
 

@@ -35,13 +35,13 @@
 """
 import Domoticz
 import toonapilib
+from devices.configuration import config
 from devices.device_factory import DeviceFactory
 
 HEARTBEATS_PER_MIN = 6
 
 
 class ToonApiLibPlugin:
-    _debug = True
     _heart_beat = 0
     _heart_bead_mod = 1
     _my_toon = None
@@ -52,10 +52,7 @@ class ToonApiLibPlugin:
 
     def on_start(self):
         Domoticz.Log("Using toonapilib version " + toonapilib.__version__ + " by " + toonapilib.__author__)
-
-        self._debug = Parameters["Mode6"] == "Debug"
-        if self._debug:
-            Domoticz.Log("Debug logging is active")
+        config.set_debug(Parameters["Mode6"] == "Debug")
 
         updates_per_min = 1
         if Parameters["Mode3"] != "":
@@ -65,11 +62,11 @@ class ToonApiLibPlugin:
         if self._my_toon is None:
             self._create_toon_object()
 
-        self._toon_devices = DeviceFactory.create_devices(self._my_toon, Devices, self._debug)
+        self._toon_devices = DeviceFactory.create_devices(self._my_toon, Devices)
         self._update_devices()
 
     def on_command(self, Unit, Command, Level, Hue):
-        if self._debug:
+        if config.debug:
             Domoticz.Log("onCommand called for Unit " + str(Unit) + ": Parameter '" +
                          str(Command) + "', Level: " + str(Level))
         self._toon_devices.on_command(Unit, Command, Level, Hue)
@@ -87,7 +84,7 @@ class ToonApiLibPlugin:
             mykey = Parameters["Mode1"]
             mysecret = Parameters["Mode2"]
 
-            if self._debug:
+            if config.debug:
                 Domoticz.Log("Creating toonapilib object")
 
             self._my_toon = toonapilib.Toon(myname, mypass, mykey, mysecret)
