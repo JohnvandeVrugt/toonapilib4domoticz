@@ -6,9 +6,9 @@ from devices.device import DeviceUpdateException
 
 
 class DeviceProgramState(Device):
-    domoticz_device_type = 244,
-    domoticz_subtype = 62,
-    domoticz_switch_type = 0,
+    domoticz_device_type = 244
+    domoticz_subtype = 62
+    domoticz_switch_type = 0
     domoticz_image = 9
 
     def __init__(self, name, unit, plugin_devices, toon, debug):

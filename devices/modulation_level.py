@@ -5,8 +5,8 @@ from devices.device import DeviceUpdateException
 
 
 class DeviceModulationLevel(Device):
-    domoticz_device_type = 243,
-    domoticz_subtype = 6,
+    domoticz_device_type = 243
+    domoticz_subtype = 6
     domoticz_switch_type = 0
 
     def __init__(self, name, unit, plugin_devices, toon, debug):
