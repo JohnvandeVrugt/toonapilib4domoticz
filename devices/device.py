@@ -44,6 +44,9 @@ class Device:
     def set_previous_value(self, str_new_value):
         self._previous_value = str_new_value
 
+    def create(self):
+        Domoticz.Log("Creating " + self.name + " as unit " + self.unit)
+
     def on_command(self, unit, command, level, hue):
         return
 

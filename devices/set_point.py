@@ -1,4 +1,5 @@
 import Domoticz
+from devices.configuration import config
 from devices.device import Device
 from devices.device import DeviceCreateException
 from devices.device import DeviceCommandException
@@ -9,8 +10,12 @@ class DeviceSetPoint(Device):
     domoticz_device_type = 242
     domoticz_subtype = 1
 
-    def __init__(self, name, unit, plugin_devices, toon, debug):
-        super().__init__(name, unit, plugin_devices, toon, debug)
+    def __init__(self, plugin_devices, toon, debug):
+        super().__init__(config.STR_UNIT_SET_POINT,
+                         config.STD_UNIT_SET_POINT,
+                         plugin_devices,
+                         toon,
+                         debug)
 
     def create(self):
         if not self.exists:

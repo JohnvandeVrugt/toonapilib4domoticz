@@ -1,4 +1,5 @@
 import Domoticz
+from devices.configuration import config
 from devices.device import Device
 from devices.device import DeviceCreateException
 from devices.device import DeviceUpdateException
@@ -10,8 +11,12 @@ class DeviceHotWaterActive(Device):
     domoticz_switch_type = 0
     domoticz_image = 9
 
-    def __init__(self, name, unit, plugin_devices, toon, debug):
-        super().__init__(name, unit, plugin_devices, toon, debug)
+    def __init__(self, plugin_devices, toon, debug):
+        super().__init__(config.STR_UNIT_HOT_WATER_ACTIVE,
+                         config.STD_UNIT_HOT_WATER_ACTIVE,
+                         plugin_devices,
+                         toon,
+                         debug)
 
     def create(self):
         if not super().exists:
