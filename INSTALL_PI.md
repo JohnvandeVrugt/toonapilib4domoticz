@@ -38,3 +38,6 @@ The plugin will generate the following devices:
 * Selector, "States"
 * Switch, "Program state"
 * Percentage, "Modulation level"
+
+Domoticz allows to replace existing devices with the newly created ones.
+See the Domoticz manual for instructions. http://www.domoticz.com/DomoticzManual.pdf
