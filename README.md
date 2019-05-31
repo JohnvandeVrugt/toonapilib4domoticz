@@ -14,5 +14,5 @@ Todo - add support for
 Refactoring / documentation
 <br>
 <br>
-This plugin will not work in combination with the stable branch.<br>
-Please use the development (beta) version of domoticz.
+This plugin will not work with Domoticz Stable Release 4.9700 but from Stable Release 4.10717 on it will work.
+Best is to use the development (beta) version of domoticz to make sure everything keeps working fine.
