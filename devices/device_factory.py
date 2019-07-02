@@ -11,6 +11,9 @@ from devices.program_state import DeviceProgramState
 from devices.set_point import DeviceSetPoint
 from devices.temperature import DeviceTemperature
 from devices.thermostat_state import DeviceThermostatState
+from devices.smartplug import DeviceSmartPlugState
+from devices.smartplug import DeviceSmartPlugUsage
+from devices.smartplug import DeviceSmartPlugkWh
 
 
 class DeviceFactory:
@@ -32,5 +35,11 @@ class DeviceFactory:
         container.add_device(DeviceThermostatState(plugin_devices, toon).create())
         container.add_device(DeviceProgramState(plugin_devices, toon).create())
         container.add_device(DeviceModulationLevel(plugin_devices, toon).create())
+
+        # Smart Plugs
+        for plug in toon.smartplugs:
+            container.add_device(DeviceSmartPlugState(plugin_devices, toon, plug).create(plug))
+            container.add_device(DeviceSmartPlugUsage(plugin_devices, toon, plug).create(plug))
+            container.add_device(DeviceSmartPlugkWh(plugin_devices, toon, plug).create(plug))
 
         return container
