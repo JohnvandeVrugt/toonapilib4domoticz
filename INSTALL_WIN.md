@@ -42,6 +42,7 @@ The plugin will generate the following devices:
 * Selector, "States"
 * Switch, "Program state"
 * Percentage, "Modulation level"
+* SmartPlugs, devices with name of SmartPlug (Switch, Electric, kWh)
 
 Domoticz allows to replace existing devices with the newly created ones.
 See the Domoticz manual for instructions. http://www.domoticz.com/DomoticzManual.pdf

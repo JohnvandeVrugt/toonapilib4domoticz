@@ -1,5 +1,6 @@
 import Domoticz
 
+
 class Singleton(type):
     _instances = {}
 
@@ -20,6 +21,9 @@ class Configuration(metaclass=Singleton):
     STD_UNIT_SCENE = 8
     STD_UNIT_PROGRAM_STATE = 9
     STD_UNIT_MODULATION_LEVEL = 10
+    STD_UNIT_SMARTPLUG_START_STATE = 100  # Begin counting for SmartPlugs State
+    STD_UNIT_SMARTPLUG_START_USAGE = 120  # Begin counting for SmartPlugs Usage
+    STD_UNIT_SMARTPLUG_START_KWH = 140    # Begin counting for SmartPlugs kWh
 
     STR_UNIT_POWER = "Power usage"
     STR_UNIT_GAS = "Gas usage"
