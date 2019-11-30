@@ -87,7 +87,7 @@ class ToonApiLibPlugin:
             self._my_toon = None
             Domoticz.Log("Could not create a toonapilib object")
             Domoticz.Log("Possible solution:")
-            Domoticz.Log("* Check your credentials")
+            Domoticz.Log("* Check your Access Token")
             Domoticz.Log("* Restart Domoticz")
 
     def _update_devices(self):
