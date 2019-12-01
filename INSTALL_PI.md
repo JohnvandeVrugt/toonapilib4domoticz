@@ -2,7 +2,7 @@
 This python plugin depends on the toonapilib created by Costas Tyfoxylos.<br>
 The toonapilib source can be found at https://github.com/costastf/toonapilib
 
-This plugin requires a Toon consumer api key and secret.<br>
+This plugin requires a Toon Access Token which can be created via "https://api.toon.eu/toonapi-accesstoken?tenant_id=eneco&client_id=<consumer_key>".<br>
 Further reading: https://developer.toon.eu.
 
 ### Install / update toonapilib

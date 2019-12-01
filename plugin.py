@@ -9,10 +9,7 @@
     <description>
     </description>
     <params>
-        <param field="Username" label="Eneco user" required="true"/>
-        <param field="Password" label="Eneco pass" required="true" password="true"/>
-        <param field="Mode1" label="Consumer key" required="true"/>
-        <param field="Mode2" label="Consumer secret" required="true" password="true"/>
+        <param field="Mode1" label="Access Token" required="true"/>
         <param field="Mode3" label="Update rate" required="true">
             <options>
                 <option label="1 minute" value="1"/>
@@ -79,21 +76,18 @@ class ToonApiLibPlugin:
 
     def _create_toon_object(self):
         try:
-            myname = Parameters["Username"]
-            mypass = Parameters["Password"]
-            mykey = Parameters["Mode1"]
-            mysecret = Parameters["Mode2"]
+            token = Parameters["Mode1"]
 
             if config.debug:
                 Domoticz.Log("Creating toonapilib object")
 
-            self._my_toon = toonapilib.Toon(myname, mypass, mykey, mysecret)
+            self._my_toon = toonapilib.Toon(token)
 
         except Exception:
             self._my_toon = None
             Domoticz.Log("Could not create a toonapilib object")
             Domoticz.Log("Possible solution:")
-            Domoticz.Log("* Check your credentials")
+            Domoticz.Log("* Check your Access Token")
             Domoticz.Log("* Restart Domoticz")
 
     def _update_devices(self):
