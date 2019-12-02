@@ -20,11 +20,8 @@ Or alternatively
 ### Setup the plugin within Domoticz
 * Navigate to the hardware section of Domoticz.
 * Select ToonApiLib4Domoticz from the type selection box and press add.
-* Fill in the required fields:
-  * Username: Eneco/Toon user name
-  * Password: Eneco/Toon password
-  * Consumer key: api key obtained from developer.toon.eu
-  * Consumer secret: api secret obtained from developer.toon.eu
+* Fill in the required field:
+  * Access Token: Access token obtained from "https://api.toon.eu/toonapi-accesstoken?tenant_id=eneco&client_id=<consumer_key>"
 
 ### Devices
 The plugin will generate the following devices:

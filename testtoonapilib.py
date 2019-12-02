@@ -5,17 +5,14 @@
 from toonapilib import Toon
 
 # please fill in your credentials and api key and secret
-eneco_username = ''
-eneco_password = ''
-consumer_key=''
-consumer_secret=''
+token = ''
 
 print("Starting toonapilib test")
 print("On success the room temperature will be presented")
 
 try:
     print("Trying to create a toon object")
-    toon = Toon(eneco_username, eneco_password, consumer_key, consumer_secret)
+    toon = Toon(token)
     print("Room temperature: ", toon.temperature)
 
 except Exception:
