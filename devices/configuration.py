@@ -24,6 +24,7 @@ class Configuration(metaclass=Singleton):
     STD_UNIT_SMARTPLUG_START_STATE = 100  # Begin counting for SmartPlugs State
     STD_UNIT_SMARTPLUG_START_USAGE = 120  # Begin counting for SmartPlugs Usage
     STD_UNIT_SMARTPLUG_START_KWH = 140    # Begin counting for SmartPlugs kWh
+    STD_UNIT_LIGHT_START_STATE = 200 # Begin counting for Light State
 
     STR_UNIT_POWER = "Power usage"
     STR_UNIT_GAS = "Gas usage"
